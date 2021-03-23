@@ -1,0 +1,20 @@
+{
+  "name": "6003cem-backend",
+  "version": "1.0.0",
+  "description": "Backend for 6003CEM",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.coventry.ac.uk/faraha11/6003CEM-backend.git"
+  },
+  "author": "Abdullaahi Farah",
+  "license": "ISC",
+  "dependencies": {
+    "@koa/cors": "^3.1.0",
+    "koa": "^2.13.1",
+    "koa-router": "^10.0.0"
+  }
+}
