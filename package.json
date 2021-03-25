@@ -7,11 +7,9 @@
     "knex": "knex --knexfile ./database/knexfile.js",
     "list": "knex --knexfile ./database/knexfile.js migrate:list",
     "undo": "knex --knexfile ./database/knexfile.js migrate:down",
-
     "make_migrate": "knex --knexfile ./database/knexfile.js migrate:make",
     "migrate": "knex --knexfile ./database/knexfile.js migrate:latest",
     "rollback": "knex --knexfile ./database/knexfile.js migrate:rollback --all",
-
     "make_seed": "knex --knexfile ./database/knexfile.js seed:make",
     "seed": "knex --knexfile ./database/knexfile.js seed:run"
   },
@@ -23,9 +21,11 @@
   "license": "ISC",
   "dependencies": {
     "@koa/cors": "^3.1.0",
+    "bcrypt": "^5.0.1",
     "dotenv": "^8.2.0",
     "knex": "^0.95.2",
     "koa": "^2.13.1",
+    "koa-bodyparser": "^4.3.0",
     "koa-router": "^10.0.0",
     "mysql2": "^2.2.5"
   }
