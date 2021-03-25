@@ -10,6 +10,11 @@ exports.getById = async function getById(id) {
 		.leftJoin('roles', 'users.id', 'roles.userID')
 };
 
+exports.getByUsername = async function getByUsername(username) {
+	return knex.from('users').select('users.*', 'roles.role').where({ username: username })
+		.leftJoin('roles', 'users.id', 'roles.userID')
+};
+
 exports.add = async function add(user) {
 	return knex.from('users').insert(user);
 };
