@@ -1,11 +1,11 @@
-exports.up = function(knex) {
-	return knex.schema.createTable('roles', function(table) {
+exports.up = function (knex) {
+	return knex.schema.createTable('roles', function (table) {
 		table.integer('userID').unsigned(),
 		table.string('role'),
-		table.foreign('userID').references('ID').on('users')
+		table.foreign('userID').references('ID').on('users').onDelete('CASCADE')
 	});
 }
 
-exports.down = function(knex) {
+exports.down = function (knex) {
 	return knex.schema.dropTable('roles');
 }
