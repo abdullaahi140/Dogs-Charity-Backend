@@ -1,15 +1,17 @@
-exports.up = function(knex) {
-	return knex.schema.createTable('users', function(table) {
+exports.up = function (knex) {
+	return knex.schema.createTable('users', function (table) {
 		table.increments('ID'),
-		table.string('username'),
-		table.string('password'),
+		table.string('username').unique().notNullable(),
+		table.string('password').notNullable(),
+		table.string('passwordSalt').notNullable(),
 		table.string('imgURL'),
 		table.string('firstName'),
 		table.string('lastName'),
-		table.timestamp('dateRegistered').defaultTo(knex.fn.now())
+		table.timestamp('dateRegistered').defaultTo(knex.fn.now()),
+		table.timestamp('dateModified').defaultTo(knex.raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'))
 	});
 }
 
-exports.down = function(knex) {
+exports.down = function (knex) {
 	return knex.schema.dropTable('users');
 }
