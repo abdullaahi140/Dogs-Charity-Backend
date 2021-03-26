@@ -2,16 +2,17 @@ const Router = require('koa-router');
 const bodyParser = require('koa-bodyparser');
 const userModel = require('../models/users.js');
 const roleModel = require('../models/roles.js')
-const hashPassword = require("../helpers/hashPassword");
+const hashPassword = require('../helpers/hashPassword.js');
+const auth = require('../controllers/auth.js');
 
 // Adding URI prefix
-const router = Router({ prefix: "/api/v1/users" })
+const router = Router({ prefix: '/api/v1/users' })
 
-router.get('/', getAll);
-router.get('/:id([0-9]{1,})', getById);
+router.get('/', auth, getAll);
+router.get('/:id([0-9]{1,})', auth, getById);
 router.post('/', bodyParser(), createUser);
-router.put('/:id([0-9]{1,})', bodyParser(), updateUser);
-router.del('/:id([0-9]{1,})', deleteUser);
+router.put('/:id([0-9]{1,})', auth, bodyParser(), updateUser);
+router.del('/:id([0-9]{1,})', auth, deleteUser);
 
 async function getAll(ctx) {
 	const result = await userModel.getAll();

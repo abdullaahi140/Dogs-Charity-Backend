@@ -2,17 +2,17 @@ const knex = require('../database/knex.js');
 
 exports.getAll = async function getAll() {
 	return knex.from('users').select('users.*', 'roles.role')
-		.leftJoin('roles', 'users.id', 'roles.userID')
+		.leftJoin('roles', 'users.ID', 'roles.userID')
 };
 
 exports.getById = async function getById(id) {
 	return knex.from('users').select('users.*', 'roles.role').where({ ID: id })
-		.leftJoin('roles', 'users.id', 'roles.userID')
+		.leftJoin('roles', 'users.ID', 'roles.userID')
 };
 
 exports.getByUsername = async function getByUsername(username) {
 	return knex.from('users').select('users.*', 'roles.role').where({ username: username })
-		.leftJoin('roles', 'users.id', 'roles.userID')
+		.leftJoin('roles', 'users.ID', 'roles.userID')
 };
 
 exports.add = async function add(user) {
@@ -25,4 +25,4 @@ exports.update = async function update(id, user) {
 
 exports.delById = async function delById(id) {
 	return knex.from('users').del().where({ ID: id });
-}
+};
