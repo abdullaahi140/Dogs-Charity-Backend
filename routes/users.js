@@ -4,6 +4,8 @@ const userModel = require('../models/users.js');
 const roleModel = require('../models/roles.js')
 const hashPassword = require('../helpers/hashPassword.js');
 const auth = require('../controllers/auth.js');
+const can = require('../permissions/users.js');
+require('dotenv').config()
 
 // Adding URI prefix
 const router = Router({ prefix: '/api/v1/users' })
@@ -15,25 +17,38 @@ router.put('/:id([0-9]{1,})', auth, bodyParser(), updateUser);
 router.del('/:id([0-9]{1,})', auth, deleteUser);
 
 async function getAll(ctx) {
-	const result = await userModel.getAll();
-	if (result.length) {
-		ctx.body = result;
+	const permission = can.readAll(ctx.state.user);
+	if (!permission.granted) {
+		ctx.status = 403;
+	} else {
+		const result = await userModel.getAll();
+		if (result.length) {
+			ctx.body = result;
+		}
 	}
 }
 
 async function getById(ctx) {
-	const id = ctx.params.id;
-	const result = await userModel.getById(id);
-	if (result.length) {
-		ctx.body = result[0];
+	const permission = await can.read(ctx.state.user, ctx.params);
+	if (!permission.granted) {
+		ctx.status = 403;
 	} else {
-		ctx.status = 404;
+		const id = ctx.params.id;
+		const user = await model.getById(id);
+		if (user.length) {
+			ctx.body = permission.filter(user[0]);
+		} else {
+			ctx.status = 404;
+		}
 	}
 }
 
 async function createUser(ctx) {
-	const { role, ...body } = await hashPassword(ctx.request.body);
-	const userWithRole = {role: role}
+	const { staffCode, ...body } = await hashPassword(ctx.request.body);
+	// checking for staff code
+	const role = (staffCode === process.env.STAFF_CODE) ? 'staff' : 'user';
+	const userWithRole = { role: role }
+
 	let id;
 	let result = await userModel.add(body);
 	if (result.length) {
