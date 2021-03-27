@@ -31,8 +31,7 @@ const checkUserAndPass = async (username, password, done) => {
 		console.log(`No user found with username ${username}`);
 	}
 
-	const guest = {'role': 'guest'}
-	return done(null, guest); // username or password were incorrect
+	return done(null, false); // username or password were incorrect
 }
 
 module.exports = new BasicStrategy(checkUserAndPass);
