@@ -7,7 +7,7 @@ const verifyPassword = async (user, password) => {
 	return await bcrypt.compare(password, user.password);
 }
 
-const checkUserAndPass = async (username, password, done) => {
+const checkUserAndPass = async function (username, password, done) {
 	// look up the user and check the password if the user exists
 	// call done() with either an error or the user, depending on outcome
 	let result;
