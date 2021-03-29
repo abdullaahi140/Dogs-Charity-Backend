@@ -1,15 +1,15 @@
 const JwtStrategy = require('passport-jwt').Strategy;
 const ExtractJwt = require('passport-jwt').ExtractJwt;
-const users =  require('../models/users.js');
+const model = require('../models/users.js');
 require('dotenv').config()
 
-const checkUserAndPass = async (jwt_payload, done) => {
+const checkJwtToken = async function (jwt_payload, done) {
 	let result;
-	const username = jwt_payload.name;
+	const { name: username, provider } = jwt_payload;
 
 	try {
-		result = await users.getByUsername(username);
-	} catch (err) {
+		result = await model.getByUsername(username, provider);
+	} catch (error) {
 		console.error(`Error during authentication for ${username}`);
 		return done(error)
 	}
@@ -27,4 +27,4 @@ const options = {
 	'secretOrKey': process.env.JWT_ACCESS_SECRET,
 }
 
-module.exports = new JwtStrategy(options, checkUserAndPass);
+module.exports = new JwtStrategy(options, checkJwtToken);

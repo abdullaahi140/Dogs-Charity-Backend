@@ -8,16 +8,18 @@ const payload = {
 	aud: '600CEM SPA',
 };
 
-exports.genJwtAccessToken = async function genJwtAccessToken(ID, username) {
+exports.genJwtAccessToken = async function genJwtAccessToken(ID, username, provider = 'internal') {
 	payload.sub = ID;
 	payload.name = username;
+	payload.provider = provider
 	const access_token = jwt.sign(payload, process.env.JWT_ACCESS_SECRET, { expiresIn: '10m' });
 	return access_token;
 }
 
-exports.genJwtRefreshToken = async function genJwtRefreshToken(ID, username) {
+exports.genJwtRefreshToken = async function genJwtRefreshToken(ID, username, provider = 'internal') {
 	payload.sub = ID;
 	payload.name = username;
+	payload.provider = provider
 	const refresh_token = jwt.sign(payload, process.env.JWT_REFRESH_SECRET, { expiresIn: '4w' });
 	const user_refresh = { userID: ID, refresh_token: refresh_token };
 	return user_refresh;
@@ -26,7 +28,7 @@ exports.genJwtRefreshToken = async function genJwtRefreshToken(ID, username) {
 exports.checkRefreshToken = async function checkRefreshToken(token) {
 	try {
 		const refresh = jwt.verify(token.refresh_token, process.env.JWT_REFRESH_SECRET);
-		let user = await model.getById(token.userID);
+		let user = await model.getById(token.userID, refresh.provider);
 		user = user[0];
 		if (
 			refresh.sub === user.ID &&
