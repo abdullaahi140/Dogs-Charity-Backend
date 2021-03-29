@@ -17,8 +17,8 @@ exports.getByUsername = async function getByUsername(username, provider = 'inter
 		.leftJoin('roles', 'users.ID', 'roles.userID')
 };
 
-exports.getOrAdd = async function getOrAdd(user) {
-	const result = await module.exports.getByUsername(user.username, user.provider);
+exports.getOrAdd = async function getOrAdd(user, provider = 'internal') {
+	const result = await module.exports.getByUsername(user.username, provider);
 	let data;
 
 	if (result.length) {
