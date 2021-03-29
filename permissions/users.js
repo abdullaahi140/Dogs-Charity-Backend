@@ -50,37 +50,36 @@ ac
 	.on('user');
 
 
-exports.readAll = (requester) => {
+exports.readAll = async function(requester) {
 	return ac
 		.can(requester.role)
 		.execute('read')
-		.sync()
 		.on('users');
 }
 
-exports.read = (requester, data) => {
+exports.read = async function(requester, data) {
+	data.id = parseInt(data.id);
 	return ac
 		.can(requester.role)
-		.context({ requester: requester.ID, owner: data.ID })
+		.context({ requester: requester.ID, owner: data.id })
 		.execute('read')
-		.sync()
 		.on('user');
 }
 
-exports.update = (requester, data) => {
+exports.update = async function(requester, data) {
+	data.id = parseInt(data.id);
 	return ac
 		.can(requester.role)
-		.context({ requester: requester.ID, owner: data.ID })
+		.context({ requester: requester.ID, owner: data.id })
 		.execute('update')
-		.sync()
 		.on('user');
 }
 
-exports.deleteUser = (requester, data) => {
+exports.deleteUser = async function(requester, data) {
+	data.id = parseInt(data.id);
 	return ac
 		.can(requester.role)
-		.context({ requester: requester.ID, owner: data.ID })
+		.context({ requester: requester.ID, owner: data.id })
 		.execute('delete')
-		.sync()
 		.on('user');
 }
