@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>database/knexfile.js - Documentation</title>
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <script src="scripts/nav.js" defer></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav >
+    
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="module-database_knex-DatabaseException.html">DatabaseException</a></li></ul><h3>Modules</h3><ul><li><a href="module-controllers_auth.html">controllers/auth</a></li><li><a href="module-controllers_validation.html">controllers/validation</a><ul class='methods'><li data-type='method'><a href="module-controllers_validation.html#~makeKoaValidator">makeKoaValidator</a></li></ul></li><li><a href="module-database_knex.html">database/knex</a><ul class='methods'><li data-type='method'><a href="module-database_knex.html#~KnexError">KnexError</a></li></ul></li><li><a href="module-database_knexfile.html">database/knexfile</a></li><li><a href="module-helpers_hashPassword.html">helpers/hashPassword</a><ul class='methods'><li data-type='method'><a href="module-helpers_hashPassword.html#~hashPassword">hashPassword</a></li></ul></li><li><a href="module-helpers_jwtToken.html">helpers/jwtToken</a><ul class='methods'><li data-type='method'><a href="module-helpers_jwtToken.html#.checkRefreshToken">checkRefreshToken</a></li><li data-type='method'><a href="module-helpers_jwtToken.html#.genJwtAccessToken">genJwtAccessToken</a></li><li data-type='method'><a href="module-helpers_jwtToken.html#.genJwtRefreshToken">genJwtRefreshToken</a></li></ul></li><li><a href="module-migrations_001_create_users.html">migrations/001_create_users</a><ul class='methods'><li data-type='method'><a href="module-migrations_001_create_users.html#.down">down</a></li><li data-type='method'><a href="module-migrations_001_create_users.html#.up">up</a></li></ul></li><li><a href="module-migrations_002_create_roles.html">migrations/002_create_roles</a><ul class='methods'><li data-type='method'><a href="module-migrations_002_create_roles.html#.down">down</a></li><li data-type='method'><a href="module-migrations_002_create_roles.html#.up">up</a></li></ul></li><li><a href="module-migrations_003_create_refresh.html">migrations/003_create_refresh</a><ul class='methods'><li data-type='method'><a href="module-migrations_003_create_refresh.html#.down">down</a></li><li data-type='method'><a href="module-migrations_003_create_refresh.html#.up">up</a></li></ul></li><li><a href="module-models_refresh.html">models/refresh</a><ul class='methods'><li data-type='method'><a href="module-models_refresh.html#.add">add</a></li><li data-type='method'><a href="module-models_refresh.html#.delById">delById</a></li><li data-type='method'><a href="module-models_refresh.html#.getById">getById</a></li></ul></li><li><a href="module-models_roles.html">models/roles</a><ul class='methods'><li data-type='method'><a href="module-models_roles.html#.add">add</a></li></ul></li><li><a href="module-models_users.html">models/users</a><ul class='methods'><li data-type='method'><a href="module-models_users.html#.add">add</a></li><li data-type='method'><a href="module-models_users.html#.delById">delById</a></li><li data-type='method'><a href="module-models_users.html#.getAll">getAll</a></li><li data-type='method'><a href="module-models_users.html#.getById">getById</a></li><li data-type='method'><a href="module-models_users.html#.getByUsername">getByUsername</a></li><li data-type='method'><a href="module-models_users.html#.getOrAdd">getOrAdd</a></li><li data-type='method'><a href="module-models_users.html#.update">update</a></li></ul></li><li><a href="module-permissions_users.html">permissions/users</a><ul class='methods'><li data-type='method'><a href="module-permissions_users.html#.deleteUser">deleteUser</a></li><li data-type='method'><a href="module-permissions_users.html#.read">read</a></li><li data-type='method'><a href="module-permissions_users.html#.readAll">readAll</a></li><li data-type='method'><a href="module-permissions_users.html#.update">update</a></li></ul></li><li><a href="module-routes_authenticate.html">routes/authenticate</a><ul class='methods'><li data-type='method'><a href="module-routes_authenticate.html#~genTokens">genTokens</a></li><li data-type='method'><a href="module-routes_authenticate.html#~googleCallback">googleCallback</a></li><li data-type='method'><a href="module-routes_authenticate.html#~login">login</a></li><li data-type='method'><a href="module-routes_authenticate.html#~logout">logout</a></li><li data-type='method'><a href="module-routes_authenticate.html#~refresh">refresh</a></li></ul></li><li><a href="module-routes_users.html">routes/users</a><ul class='methods'><li data-type='method'><a href="module-routes_users.html#~createUser">createUser</a></li><li data-type='method'><a href="module-routes_users.html#~deleteUser">deleteUser</a></li><li data-type='method'><a href="module-routes_users.html#~getAll">getAll</a></li><li data-type='method'><a href="module-routes_users.html#~getById">getById</a></li><li data-type='method'><a href="module-routes_users.html#~updateUser">updateUser</a></li></ul></li><li><a href="module-seeds_001_seed_users.html">seeds/001_seed_users</a><ul class='methods'><li data-type='method'><a href="module-seeds_001_seed_users.html#.seed">seed</a></li></ul></li><li><a href="module-seeds_002_seed_roles.html">seeds/002_seed_roles</a><ul class='methods'><li data-type='method'><a href="module-seeds_002_seed_roles.html#.seed">seed</a></li></ul></li><li><a href="module-strategies_basic.html">strategies/basic</a><ul class='methods'><li data-type='method'><a href="module-strategies_basic.html#~checkCredentials">checkCredentials</a></li></ul></li><li><a href="module-strategies_google.html">strategies/google</a><ul class='methods'><li data-type='method'><a href="module-strategies_google.html#~checkGoogleAuth">checkGoogleAuth</a></li></ul></li><li><a href="module-strategies_jwt.html">strategies/jwt</a><ul class='methods'><li data-type='method'><a href="module-strategies_jwt.html#~checkJWT">checkJWT</a></li></ul></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">database/knexfile.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * A module to configuration for Knex to connect to a MySQL database
+ * @module database/knexfile
+ * @author Abdullaahi Farah
+ * @see database/migrations/* for database migration files
+ * @see database/seeds/* for database seeds files
+ */
+
+require('dotenv').config({ path: `${__dirname}/../.env` });
+
+module.exports = {
+	development: {
+		client: 'mysql2',
+		connection: {
+			host: process.env.DB_HOST,
+			port: process.env.DB_PORT,
+			user: process.env.DB_USER,
+			password: process.env.DB_PASSWORD,
+			database: process.env.DB_DATABASE
+		},
+		migrations: {
+			directory: `${__dirname}/migrations`
+		},
+		seeds: {
+			directory: `${__dirname}/seeds`
+		}
+	},
+	test: {
+		client: 'mysql2',
+		connection: {
+			host: process.env.DB_HOST,
+			port: process.env.DB_PORT,
+			user: process.env.DB_USER,
+			password: process.env.DB_PASSWORD,
+			database: process.env.TEST_DB_DATABASE
+		},
+		migrations: {
+			directory: `${__dirname}/migrations`
+		},
+		seeds: {
+			directory: `${__dirname}/seeds`
+		}
+	}
+};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+    
+    
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a> on Fri Apr 02 2021 02:07:57 GMT+0000 (GMT) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/polyfill.js"></script>
+<script src="scripts/linenumber.js"></script>
+
+
+
+</body>
+</html>
