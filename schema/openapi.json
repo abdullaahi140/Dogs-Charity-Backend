@@ -1,0 +1,310 @@
+{
+	"openapi": "3.0.0",
+	"info": {
+		"version": "0.1.0",
+		"title": "6003CEM Koa Server",
+		"description": "An API for shelter dogs.",
+		"contact": {
+			"name": "Abdullaahi Farah",
+			"email": "faraha11@coventry.ac.uk"
+		},
+		"license": {
+			"name": "Apache 2.0",
+			"url": "https://www.apache.org/licenses/LICENSE-2.0.html"
+		}
+	},
+	"servers": [
+		{
+			"url": "https://localhost:3000/api/v1",
+			"description": "Development server."
+		}
+	],
+	"tags": [
+		{
+			"name": "Users",
+			"description": "API endpoints for user management."
+		},
+		{
+			"name": "Authentication",
+			"description": "API endpoints for authentication."
+		}
+	],
+	"paths": {
+		"/users": {
+			"summary": "Represents an individual user",
+			"description": "This resource represents an individual user in the system. Each user is identified by a numeric `id`.\n",
+			"post": {
+				"tags": [
+					"Users"
+				],
+				"description": "Create a new user account.",
+				"requestBody": {
+					"description": "All new user data.",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "./user.schema.json#/definitions/user"
+							}
+						}
+					}
+				},
+				"responses": {
+					"201": {
+						"description": "User created.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "./user.schema.json#/definitions/userCreated"
+								}
+							}
+						}
+					}
+				}
+			},
+			"get": {
+				"tags": [
+					"Users"
+				],
+				"description": "Get a list of all users.",
+				"responses": {
+					"200": {
+						"description": "List of users.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "./user.schema.json#/definitions/userList"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Only admin users can list all accounts."
+					}
+				}
+			}
+		},
+		"/users/{id}": {
+			"parameters": [
+				{
+					"in": "path",
+					"name": "id",
+					"schema": {
+						"$ref": "./user.schema.json#/definitions/userID"
+					},
+					"required": true
+				}
+			],
+			"get": {
+				"tags": [
+					"Users"
+				],
+				"description": "Get user by id.",
+				"responses": {
+					"200": {
+						"description": "View of user record.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "./user.schema.json#/definitions/userView"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Only staff and users can view their own record."
+					},
+					"404": {
+						"description": "Not found."
+					}
+				}
+			},
+			"put": {
+				"tags": [
+					"Users"
+				],
+				"description": "Update user by ID.",
+				"requestBody": {
+					"description": "Update a visible property or the password.",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "./user.schema.json#/definitions/userUpdate"
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Confirmation and link to record.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "./user.schema.json#/definitions/userUpdated"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Not found."
+					}
+				}
+			},
+			"delete": {
+				"tags": [
+					"Users"
+				],
+				"description": "Delete user by ID.",
+				"responses": {
+					"200": {
+						"description": "Confirmation of deletion.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "./user.schema.json#/definitions/userDeleted"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Only authenticated users can delete their own accounts."
+					},
+					"404": {
+						"description": "Not found."
+					}
+				}
+			}
+		},
+		"/auth/login": {
+			"summary": "Initial login for internal users of the API.",
+			"description": "Internal users will use this login route to generate JWTs for use with authorisation later on.",
+			"post": {
+				"tags": [
+					"Authentication"
+				],
+				"description": "Login to the API as an internal user.",
+				"requestBody": {
+					"description": "Existing internal user present in the database.",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "./auth.schema.json#/definitions/user"
+							}
+						}
+					}
+				},
+				"responses": {
+					"201": {
+						"description": "User has authenticated.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "./auth.schema.json#/definitions/userAuthenticated"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Incorrect credentials were given."
+					}
+				}
+			}
+		},
+		"/auth/logout/": {
+			"summary": "An authenticated user wanting to logout of the API.",
+			"description": "Users can logout of the API with their current sessions deleted from the database. This is done by removing the user's refresh token.",
+			"post": {
+				"tags": [
+					"Authentication"
+				],
+				"description": "Log out the user from the API.",
+				"responses": {
+					"200": {
+						"description": "The user has successfully logged out.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "./auth.schema.json#/definitions/userLoggedOut"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Only authenticated users can log out."
+					},
+					"404": {
+						"description": "Not found."
+					}
+				}
+			}
+		},
+		"/auth/refresh/{id}": {
+			"summary": "An authenticated user requesting a new access token.",
+			"description": "Access token have a limited lifetime therefore needing to be reissued upon exiry. This can be done using the refresh token given an initial login.",
+			"parameters": [
+				{
+					"in": "path",
+					"name": "id",
+					"schema": {
+						"$ref": "./user.schema.json#/definitions/userID"
+					},
+					"required": true
+				}
+			],
+			"get": {
+				"tags": [
+					"Authentication"
+				],
+				"description": "Refresh an expired access token.",
+				"responses": {
+					"200": {
+						"description": "Access token has been refreshed.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "./auth.schema.json#/definitions/userAuthenticated"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Not found"
+					}
+				}
+			}
+		},
+		"/auth/google": {
+			"get": {
+				"tags": [
+					"Authentication"
+				],
+				"description": "Initiate Google OAuth 2.0 authentication. Google will redirect the route to `/google/callback` when the user successfully authenticates."
+			}
+		},
+		"/auth/google/callback": {
+			"get": {
+				"tags": [
+					"Authentication"
+				],
+				"description": "Callback function called by Google upon successful authentication.",
+				"responses": {
+					"200": {
+						"description": "The user successfully authenticated with Google.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "./auth.schema.json#/definitions/userAuthenticated"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Not found"
+					}
+				}
+			}
+		}
+	}
+}
