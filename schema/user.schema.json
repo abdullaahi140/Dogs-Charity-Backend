@@ -1,0 +1,316 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"definitions": {
+		"user": {
+			"$id": "#user",
+			"title": "User",
+			"description": "Data to register a new user.",
+			"type": "object",
+			"properties": {
+				"username": {
+					"description": "Unique username",
+					"type": "string",
+					"minLength": 3,
+					"examples": [
+						"example123"
+					]
+				},
+				"firstName": {
+					"description": "First name",
+					"type": "string",
+					"examples": [
+						"Example"
+					]
+				},
+				"lastName": {
+					"description": "Last name",
+					"type": "string",
+					"example": [
+						"User"
+					]
+				},
+				"password": {
+					"description": "Password for registration",
+					"type": "string",
+					"minLength": 6,
+					"examples": [
+						"password123"
+					]
+				},
+				"imgURL": {
+					"description": "URL of avatar image",
+					"type": "string",
+					"format": "uri",
+					"examples": [
+						"https://visualpharm.com/assets/314/Admin-595b40b65ba036ed117d36fe.svg"
+					]
+				},
+				"provider": {
+					"description": "Account provider",
+					"type": "string",
+					"enum": [
+						"internal",
+						"google"
+					],
+					"default": "internal",
+					"examples": [
+						"google"
+					]
+				},
+				"role": {
+					"description": "The role used to determine a user's permissions",
+					"type": "string",
+					"minLength": 12,
+					"enum": [
+						"user",
+						"staff",
+						"admin"
+					],
+					"examples": [
+						"user"
+					]
+				},
+				"staffCode": {
+					"description": "Code used to determine whether a user should be given the staff role",
+					"type": "string",
+					"minLength": 12,
+					"examples": [
+						"*3H92L%Wg%pc"
+					]
+				}
+			},
+			"required": [
+				"username",
+				"password"
+			],
+			"additionalProperties": false
+		},
+		"userView": {
+			"$id": "#userView",
+			"title": "User View",
+			"description": "Data visible to users, staff and admins (excludes password).",
+			"type": "object",
+			"properties": {
+				"ID": {
+					"description": "ID of the updated user record",
+					"type": "number",
+					"examples": [
+						1
+					]
+				},
+				"username": {
+					"description": "Unique username",
+					"type": "string",
+					"examples": [
+						"example123"
+					]
+				},
+				"firstName": {
+					"description": "First name",
+					"type": "string",
+					"examples": [
+						"Example"
+					]
+				},
+				"lastName": {
+					"description": "Last name",
+					"type": "string",
+					"examples": [
+						"User"
+					]
+				},
+				"imgURL": {
+					"description": "URL of avatar image",
+					"type": "string",
+					"examples": [
+						"https://visualpharm.com/assets/314/Admin-595b40b65ba036ed117d36fe.svg"
+					]
+				},
+				"dateCreated": {
+					"description": "The datetime of the account being created",
+					"type": "string",
+					"minLength": 19,
+					"examples": [
+						"2021-03-30 10:50:24"
+					]
+				},
+				"dateModified": {
+					"description": "The datetime of the account being modified",
+					"type": "string",
+					"minLength": 19,
+					"examples": [
+						"2021-03-30 18:50:24"
+					]
+				},
+				"provider": {
+					"description": "Account provider",
+					"type": "string",
+					"enum": [
+						"internal",
+						"google"
+					],
+					"default": "internal",
+					"examples": [
+						"google"
+					]
+				}
+			}
+		},
+		"userUpdate": {
+			"$id": "#userUpdate",
+			"title": "User Update",
+			"description": "Data a user can update (excludes username).",
+			"type": "object",
+			"properties": {
+				"username": {
+					"description": "Unique username to be updated",
+					"type": "string",
+					"minLength": 3,
+					"examples": [
+						"example123"
+					]
+				},
+				"firstName": {
+					"description": "First name",
+					"type": "string",
+					"examples": [
+						"Example"
+					]
+				},
+				"lastName": {
+					"description": "Last name",
+					"type": "string",
+					"examples": [
+						"User"
+					]
+				},
+				"password": {
+					"description": "Password for registration",
+					"type": "string",
+					"minLength": 6,
+					"examples": [
+						"password123"
+					]
+				},
+				"imgURL": {
+					"description": "URL of avatar image",
+					"type": "string",
+					"format": "uri",
+					"examples": [
+						"https://visualpharm.com/assets/314/Admin-595b40b65ba036ed117d36fe.svg"
+					]
+				}
+			},
+			"additionalProperties": false
+		},
+		"userID": {
+			"$id": "#userID",
+			"title": "User ID",
+			"description": "The user's ID number.",
+			"type": "object",
+			"properties": {
+				"id": {
+					"description": "ID of the updated user record",
+					"type": "number",
+					"examples": [
+						1
+					]
+				}
+			},
+			"required": [
+				"id"
+			]
+		},
+		"userList": {
+			"$id": "#userList",
+			"title": "User List",
+			"description": "List of all users visible to admin only.",
+			"type": "array",
+			"items": {
+				"$ref": "#/definitions/userView"
+			}
+		},
+		"userCreated": {
+			"$id": "#userCreated",
+			"title": "User Created",
+			"description": "Confirmation of a successful user creation",
+			"type": "object",
+			"properties": {
+				"ID": {
+					"description": "ID of the updated user record",
+					"type": "number",
+					"examples": [
+						1
+					]
+				},
+				"created": {
+					"description": "Boolean indicator of success",
+					"type": "boolean",
+					"examples": [
+						true
+					]
+				},
+				"link": {
+					"description": "Path to retrieve user record",
+					"type": "string",
+					"format": "uri",
+					"examples": [
+						"http://localhost/api/v1/users/1"
+					]
+				}
+			}
+		},
+		"userUpdated": {
+			"$id": "#userUpdated",
+			"title": "User Updated",
+			"description": "Confirmation of a successful user update/creation",
+			"type": "object",
+			"properties": {
+				"ID": {
+					"description": "ID of the updated user record",
+					"type": "number",
+					"examples": [
+						1
+					]
+				},
+				"updated": {
+					"description": "Boolean indicator of success",
+					"type": "boolean",
+					"examples": [
+						true
+					]
+				},
+				"link": {
+					"description": "Path to retrieve user record",
+					"type": "string",
+					"format": "uri",
+					"examples": [
+						"http://localhost/api/v1/users/1"
+					]
+				}
+			}
+		},
+		"userDeleted": {
+			"$id": "#userDeleted",
+			"title": "User Deleted",
+			"description": "Confirmation of a successful deletion",
+			"type": "object",
+			"properties": {
+				"ID": {
+					"description": "ID of the updated user record",
+					"type": "number",
+					"examples": [
+						1
+					]
+				},
+				"deleted": {
+					"description": "Boolean indicator of success",
+					"type": "boolean",
+					"examples": [
+						true
+					]
+				}
+			}
+		}
+	}
+}

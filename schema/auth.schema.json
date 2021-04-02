@@ -1,0 +1,75 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema",
+	"definitions": {
+		"user": {
+			"$id": "#user",
+			"title": "User",
+			"description": "Data to authenticate a returning user.",
+			"type": "object",
+			"properties": {
+				"username": {
+					"description": "Unique username",
+					"type": "string",
+					"minLength": 3,
+					"examples": [
+						"example123"
+					]
+				},
+				"password": {
+					"description": "Password for registration",
+					"type": "string",
+					"minLength": 6,
+					"examples": [
+						"password123"
+					]
+				}
+			},
+			"required": [
+				"username",
+				"password"
+			],
+			"additionalProperties": false
+		},
+		"userAuthenticated": {
+			"$id": "#authenticatedUser",
+			"title": "Authenticated user",
+			"description": "The user has successfully authenticated.",
+			"type": "object",
+			"properties": {
+				"accessToken": {
+					"description": "JWT access token used for authentication with other routes.",
+					"type": "string",
+					"minLength": 200,
+					"examples": [
+						"eyJhbGciOiJIUzCI6IkpXVCJ9.eyJpc3MiOiI2MDAzQ0VNIEtv0gU1BBIiwic3ViIjoxLCJuYW1lIjoiYWRtaW4iLCJwcm92aWRlciI6ImludGVF0IjoxNjE3MTMyNDg3LCJleHAiOjE2MTcxMzMwODd9.wW_YMGA_Y6r7T5jJiGpBCjHfAjimsHpDHk"
+					]
+				}
+			}
+		},
+		"userLoggedOut": {
+			"$id": "#userLoggedOut",
+			"title": "Logged out user",
+			"description": "The user has successfully logged out.",
+			"type": "object",
+			"properties": {
+				"affectedRows": {
+					"description": "The amount of users logged.",
+					"type": "number",
+					"minLength": 1,
+					"default": 1,
+					"examples": [
+						1
+					]
+				},
+				"loggedOut": {
+					"description": "Boolean indicating if the user successfully logged out.",
+					"type": "boolean",
+					"default": true,
+					"examples": [
+						true
+					]
+				}
+			}
+		}
+	}
+}
