@@ -117,3 +117,6 @@ dist
 
 # VS Code configs
 .vscode/
+
+# Jest
+coverage/
