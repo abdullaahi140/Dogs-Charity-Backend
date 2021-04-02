@@ -12,7 +12,11 @@
     "rollback": "knex --knexfile ./database/knexfile.js migrate:rollback --all",
     "make_seed": "knex --knexfile ./database/knexfile.js seed:make",
     "seed": "knex --knexfile ./database/knexfile.js seed:run",
-    "refresh_db": "npm run rollback && npm run migrate && npm run seed"
+    "refresh_db": "npm run rollback && npm run migrate && npm run seed",
+    "docs": "jsdoc -c jsdoc.conf.json --readme ./README.md",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "coverage": "jest --coverage"
   },
   "repository": {
     "type": "git",
@@ -24,15 +28,31 @@
     "@koa/cors": "^3.1.0",
     "bcrypt": "^5.0.1",
     "dotenv": "^8.2.0",
+    "jsonschema": "^1.4.0",
+    "jsonwebtoken": "^8.5.1",
     "knex": "^0.95.2",
     "koa": "^2.13.1",
     "koa-bodyparser": "^4.3.0",
+    "koa-mount": "^4.0.0",
     "koa-passport": "^4.1.4",
     "koa-router": "^10.0.0",
+    "koa-static": "^5.0.0",
     "mysql2": "^2.2.5",
     "passport-google-oauth20": "^2.0.0",
     "passport-http": "^0.3.0",
     "passport-jwt": "^4.0.0",
-    "role-acl": "^4.5.4"
+    "role-acl": "^4.5.4",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "docdash": "^1.2.0",
+    "eslint": "^7.23.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-jest": "^24.3.2",
+    "jest": "^26.6.3",
+    "jsdoc": "^3.6.6",
+    "minami": "^1.2.3",
+    "supertest": "^6.1.3"
   }
 }
