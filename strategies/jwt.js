@@ -1,30 +1,40 @@
-const JwtStrategy = require('passport-jwt').Strategy;
-const ExtractJwt = require('passport-jwt').ExtractJwt;
+/**
+ * A module for JWT authentication middleware using Passport.
+ * @module strategies/jwt
+ * @author Abdullaahi Farah
+ * @see strategies/* for other Passport.js strategies
+ */
+
+const jwt = require('passport-jwt');
 const model = require('../models/users.js');
-require('dotenv').config()
+require('dotenv').config();
 
-const checkJwtToken = async function (jwt_payload, done) {
-	let result;
-	const { name: username, provider } = jwt_payload;
-
-	try {
-		result = await model.getByUsername(username, provider);
-	} catch (error) {
-		console.error(`Error during authentication for ${username}`);
-		return done(error)
-	}
+/**
+ * Function that verifies a JWT and checks the user in the token.
+ * @param {string} jwtPayload - The decoded JWT with the user information
+ * @param {Object} done - Passport.js method to implement strategy
+ * @returns {function} - A callback function with the authenticated user or null
+ */
+const checkJWT = async function checkJWT(jwtPayload, done) {
+	const { name: username, provider } = jwtPayload;
+	const result = await model.getByUsername(username, provider);
 
 	if (result.length) {
 		const user = result[0];
-		return done(null, user);
-	} else {
-		return done(null, false); // credentails are incorrect
+		return done(null, user); // user is authenticated
 	}
-}
+	return done(null, false); // token is invalid
+};
 
+/**
+ * passport-jwt Options object
+ * @type {jwt.StrategyOptions}
+ */
 const options = {
-	'jwtFromRequest': new ExtractJwt.fromAuthHeaderAsBearerToken(),
-	'secretOrKey': process.env.JWT_ACCESS_SECRET,
-}
+	// eslint-disable-next-line new-cap
+	jwtFromRequest: jwt.ExtractJwt.fromAuthHeaderAsBearerToken(),
+	secretOrKey: process.env.JWT_ACCESS_SECRET,
+	issuer: process.env.SERVER_NAME
+};
 
-module.exports = new JwtStrategy(options, checkJwtToken);
+module.exports = new jwt.Strategy(options, checkJWT);

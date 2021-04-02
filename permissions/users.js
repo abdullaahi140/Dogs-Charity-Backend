@@ -1,42 +1,62 @@
+/**
+ * A module to check permission for users interacting with other users in the database.
+ * @module permissions/users
+ * @author Abdullaahi Farah
+ * @see permissions/* for other permissions in the API
+ */
+
 const AccessControl = require('role-acl');
+
 const ac = new AccessControl();
 
 // User permissions
 ac
 	.grant('user')
-	.condition({ Fn: 'EQUALS', args: { 'requester': '$.owner' } })
+	.condition({ Fn: 'EQUALS', args: { requester: '$.owner' } })
 	.execute('read')
 	.on('user', ['*', '!password', '!passwordSalt']);
 
 ac
 	.grant('user')
-	.condition({ Fn: 'EQUALS', args: { 'requester': '$.owner' } })
+	.condition({ Fn: 'EQUALS', args: { requester: '$.owner' } })
 	.execute('update')
-	.on('user', ['firstName', 'lastName', 'about', 'password', 'email', 'imgURL', 'dateModified']);
+	.on('user', ['username', 'firstName', 'lastName', 'password', 'passwordSalt', 'imgURL']);
+
+ac
+	.grant('user')
+	.condition({ Fn: 'EQUALS', args: { requester: '$.owner' } })
+	.execute('delete')
+	.on('user');
 
 // Staff permissions
 ac
 	.grant('staff')
-	.condition({ Fn: 'EQUALS', args: { 'requester': '$.owner' } })
+	.condition({ Fn: 'EQUALS', args: { requester: '$.owner' } })
 	.execute('read')
 	.on('user', ['*', '!password', '!passwordSalt']);
 
 ac
 	.grant('staff')
-	.condition({ Fn: 'EQUALS', args: { 'requester': '$.owner' } })
+	.condition({ Fn: 'EQUALS', args: { requester: '$.owner' } })
 	.execute('update')
-	.on('user', ['firstName', 'lastName', 'about', 'password', 'email', 'imgURL', 'dateModified']);
+	.on('user', ['username', 'firstName', 'lastName', 'password', 'passwordSalt', 'imgURL']);
+
+ac
+	.grant('staff')
+	.condition({ Fn: 'EQUALS', args: { requester: '$.owner' } })
+	.execute('delete')
+	.on('user');
 
 // Admin permissions
 ac
 	.grant('admin')
 	.execute('read')
-	.on('user');
+	.on('user', ['*', '!password', '!passwordSalt']);
 
 ac
 	.grant('admin')
 	.execute('read')
-	.on('users');
+	.on('users', ['*', '!password', '!passwordSalt']);
 
 ac
 	.grant('admin')
@@ -45,41 +65,66 @@ ac
 
 ac
 	.grant('admin')
-	.condition({ Fn: 'NOT_EQUALS', args: { 'requester': '$.owner' } })
+	.condition({ Fn: 'NOT_EQUALS', args: { requester: '$.owner' } })
 	.execute('delete')
 	.on('user');
 
-
-exports.readAll = async function(requester) {
+/**
+ * Function that checks permissions for accessing all user details.
+ * @param {Object} requester - The authenticated user requesting access to the resource
+ * @returns {Object} - A permissions Object that grants the user and filters the resource.
+ */
+exports.readAll = async function readAll(requester) {
 	return ac
 		.can(requester.role)
 		.execute('read')
 		.on('users');
-}
+};
 
-exports.read = async function(requester, data) {
-	data.id = parseInt(data.id);
+/**
+ * Function that checks permissions for accessing a user's details.
+ * @param {Object} requester - The authenticated user requesting access to the resource
+ * @param {Object} data - The user with ID that's to be retrieved from the database
+ * @returns {Object} - A permissions Object that grants the user and filters the resource.
+ */
+exports.read = async function read(requester, data) {
+	let { id } = data;
+	id = parseInt(id, 10);
 	return ac
 		.can(requester.role)
-		.context({ requester: requester.ID, owner: data.id })
+		.context({ requester: requester.ID, owner: id })
 		.execute('read')
 		.on('user');
-}
+};
 
-exports.update = async function(requester, data) {
-	data.id = parseInt(data.id);
+/**
+ * Function that checks permissions for updating a user's details.
+ * @param {Object} requester - The authenticated user requesting access to the resource
+ * @param {Object} data - The user with ID that's to be retrieved from the database
+ * @returns {Object} - A permissions Object that grants the user and filters the resource.
+ */
+exports.update = async function update(requester, data) {
+	let { id } = data;
+	id = parseInt(id, 10);
 	return ac
 		.can(requester.role)
-		.context({ requester: requester.ID, owner: data.id })
+		.context({ requester: requester.ID, owner: id })
 		.execute('update')
 		.on('user');
-}
+};
 
-exports.deleteUser = async function(requester, data) {
-	data.id = parseInt(data.id);
+/**
+ * Function that checks permissions for deleting a user's details.
+ * @param {Object} requester - The authenticated user requesting access to the resource
+ * @param {Object} data - The user with ID that's to be retrieved from the database
+ * @returns {Object} - A permissions Object that grants the user and filters the resource.
+ */
+exports.deleteUser = async function deleteUser(requester, data) {
+	let { id } = data;
+	id = parseInt(id, 10);
 	return ac
 		.can(requester.role)
-		.context({ requester: requester.ID, owner: data.id })
+		.context({ requester: requester.ID, owner: id })
 		.execute('delete')
 		.on('user');
-}
+};

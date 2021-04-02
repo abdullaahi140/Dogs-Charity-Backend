@@ -1,37 +1,34 @@
-const BasicStrategy = require('passport-http').BasicStrategy;
-const users =  require('../models/users.js');
+/**
+ * A module for Basic Authentication middleware using Passport.
+ * @module strategies/basic
+ * @author Abdullaahi Farah
+ * @see strategies/* for other Passport.js strategies
+ */
+
+const { BasicStrategy } = require('passport-http');
 const bcrypt = require('bcrypt');
+const users = require('../models/users.js');
 
-const verifyPassword = async (user, password) => {
-	// compare user.password with the password supplied
-	return await bcrypt.compare(password, user.password);
-}
-
-const checkUserAndPass = async function (username, password, done) {
-	// look up the user and check the password if the user exists
-	// call done() with either an error or the user, depending on outcome
-	let result;
-
-	try {
-		result = await users.getByUsername(username);
-	} catch (err) {
-		console.error(`Error during authentication for ${username}`);
-		return done(err)
+/**
+ * Function that checks a user account account exists using credentials.
+ * @param {string} username - The user's username
+ * @param {string} password - The user's password
+ * @param {Object} done - Passport.js method to implement strategy
+ * @returns {function} - A callback function with the authenticated user or null
+ */
+const checkCredentials = async function checkCredentials(username, password, done) {
+	const result = await users.getByUsername(username);
+	if (!result.length) {
+		return done(null, false); // username is incorrect
 	}
 
-	if (result.length) {
-		const user = result[0];
-		if (await verifyPassword(user, password)) {
-			console.log(`Successfully authenticated user ${username}`);
-			return done(null, user);
-		} else {
-			console.log(`Password incorrect for user ${username}`);
-		}
-	} else {
-		console.log(`No user found with username ${username}`);
+	const user = result[0];
+	const checkPassword = await bcrypt.compare(password, user.password);
+	if (checkPassword) {
+		return done(null, user); // user is authenticated
 	}
 
-	return done(null, false); // username or password were incorrect
-}
+	return done(null, false); // password is incorrect
+};
 
-module.exports = new BasicStrategy(checkUserAndPass);
+module.exports = new BasicStrategy(checkCredentials);
