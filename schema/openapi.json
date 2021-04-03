@@ -32,7 +32,7 @@
 	"paths": {
 		"/users": {
 			"summary": "Represents an individual user",
-			"description": "This resource represents an individual user in the system. Each user is identified by a numeric `id`.\n",
+			"description": "This resource represents an individual user in the system. Each user is identified by a numeric `ID`.\n",
 			"post": {
 				"tags": [
 					"Users"
@@ -84,11 +84,11 @@
 				}
 			}
 		},
-		"/users/{id}": {
+		"/users/{ID}": {
 			"parameters": [
 				{
 					"in": "path",
-					"name": "id",
+					"name": "ID",
 					"schema": {
 						"$ref": "./user.schema.json#/definitions/userID"
 					},
@@ -99,7 +99,7 @@
 				"tags": [
 					"Users"
 				],
-				"description": "Get user by id.",
+				"description": "Get user by ID.",
 				"responses": {
 					"200": {
 						"description": "View of user record.",
@@ -240,13 +240,13 @@
 				}
 			}
 		},
-		"/auth/refresh/{id}": {
+		"/auth/refresh/{ID}": {
 			"summary": "An authenticated user requesting a new access token.",
 			"description": "Access token have a limited lifetime therefore needing to be reissued upon exiry. This can be done using the refresh token given an initial login.",
 			"parameters": [
 				{
 					"in": "path",
-					"name": "id",
+					"name": "ID",
 					"schema": {
 						"$ref": "./user.schema.json#/definitions/userID"
 					},

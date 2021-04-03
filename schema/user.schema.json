@@ -209,7 +209,7 @@
 			"description": "The user's ID number.",
 			"type": "object",
 			"properties": {
-				"id": {
+				"ID": {
 					"description": "ID of the updated user record",
 					"type": "number",
 					"examples": [
@@ -218,7 +218,7 @@
 				}
 			},
 			"required": [
-				"id"
+				"ID"
 			]
 		},
 		"userList": {

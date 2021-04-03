@@ -97,7 +97,7 @@ exports.update = async function update(ID, user, provider = 'internal') {
 
 /**
  * Function that removes a user from the database.
- * @param {Object} ID - The id of the user
+ * @param {Object} ID - The ID of the user
  * @param {string} provider - The provider of the account e.g. 'google', 'internal'
  * @returns {integer} - The number of rows deleted by the database
  * @throws {KnexError} - Re-raise and sanitise DB errors

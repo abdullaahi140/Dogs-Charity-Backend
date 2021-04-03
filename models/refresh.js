@@ -9,7 +9,7 @@ const { knex, KnexError } = require('../database/knex.js');
 
 /**
  * Function that gets row from database using ID.
- * @param {string} userID - The id of the user
+ * @param {string} userID - The ID of the user
  * @returns {Object} - Row containing user and refresh token
  * @throws {KnexError} - Re-raise and sanitise DB errors
  */
@@ -31,7 +31,7 @@ exports.add = async function add(user) {
 
 /**
  * Function that removes a user's refresh token from the database.
- * @param {Object} userID - The id of the user
+ * @param {Object} userID - The ID of the user
  * @returns {integer} - The number of rows deleted by the database
  * @throws {KnexError} - Re-raise and sanitise DB errors
  */
