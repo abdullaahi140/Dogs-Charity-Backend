@@ -20,14 +20,14 @@ exports.getAll = async function getAll() {
 
 /**
  * Function that gets user using ID.
- * @param {string} id - ID of the user
+ * @param {string} ID - ID of the user
  * @param {string} provider - The provider of the account e.g. 'google', 'internal'
  * @returns {Object} - Object with user's information
  * @throws {KnexError} - Re-raise and sanitise DB errors
  */
-exports.getById = async function getById(id, provider = 'internal') {
+exports.getById = async function getById(ID, provider = 'internal') {
 	return knex.from('users').select('users.*', 'roles.role')
-		.where({ ID: id, provider })
+		.where({ ID, provider })
 		.leftJoin('roles', 'users.ID', 'roles.userID')
 		.catch((error) => KnexError(error));
 };
@@ -62,8 +62,8 @@ exports.getOrAdd = async function getOrAdd(user, provider = 'internal') {
 	// Add user if not present in database
 	const data = await module.exports.add(user, user.provider);
 	if (data.length) {
-		const id = data[0];
-		result = await module.exports.getById(id, user.provider);
+		const ID = data[0];
+		result = await module.exports.getById(ID, user.provider);
 		return result;
 	}
 	return false;
@@ -84,25 +84,25 @@ exports.add = async function add(user, provider = 'internal') {
 
 /**
  * Function that updates user in the database.
- * @param {string} id - ID of the user
+ * @param {string} ID - ID of the user
  * @param {Object} user - Object with user's information
  * @param {string} provider - The provider of the account e.g. 'google', 'internal'
  * @returns {Array} - Array with ID's of users updated
  * @throws {KnexError} - Re-raise and sanitise DB errors
  */
-exports.update = async function update(id, user, provider = 'internal') {
-	return knex.from('users').update(user).where({ ID: id, provider })
+exports.update = async function update(ID, user, provider = 'internal') {
+	return knex.from('users').update(user).where({ ID, provider })
 		.catch((error) => KnexError(error));
 };
 
 /**
  * Function that removes a user from the database.
- * @param {Object} id - The id of the user
+ * @param {Object} ID - The id of the user
  * @param {string} provider - The provider of the account e.g. 'google', 'internal'
  * @returns {integer} - The number of rows deleted by the database
  * @throws {KnexError} - Re-raise and sanitise DB errors
  */
-exports.delById = async function delById(id, provider = 'internal') {
-	return knex.from('users').del().where({ ID: id, provider })
+exports.delById = async function delById(ID, provider = 'internal') {
+	return knex.from('users').del().where({ ID, provider })
 		.catch((error) => KnexError(error));
 };
