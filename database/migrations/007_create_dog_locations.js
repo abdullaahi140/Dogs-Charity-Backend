@@ -16,7 +16,7 @@ exports.up = function up(knex) {
 		table.integer('dogID').unique().unsigned();
 		table.integer('locationID').unsigned();
 		table.foreign('dogID').references('dogs.ID').onDelete('CASCADE');
-		table.foreign('locationID').references('locations.ID').onDelete('CASCADE')
+		table.foreign('locationID').references('locations.ID').onDelete('CASCADE');
 	});
 };
 
