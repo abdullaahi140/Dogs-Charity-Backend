@@ -18,6 +18,7 @@ exports.seed = function seed(knex) {
 		.then(() => knex('roles').insert([
 			{ userID: 1, role: 'admin' },
 			{ userID: 2, role: 'staff' },
-			{ userID: 3, role: 'user' }
+			{ userID: 3, role: 'user' },
+			{ userID: 4, role: 'staff' }
 		]));
 };
