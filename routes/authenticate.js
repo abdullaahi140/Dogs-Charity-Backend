@@ -67,8 +67,8 @@ async function logout(ctx) {
  * @param {Object} ctx - The Koa request/response context object
  */
 async function refresh(ctx) {
-	const { id } = ctx.params;
-	const result = await model.getById(id);
+	const { ID } = ctx.params;
+	const result = await model.getById(ID);
 	if (result.length) {
 		const accessToken = await jwt.checkRefreshToken(result[0]);
 		if (accessToken) {
@@ -94,7 +94,7 @@ async function googleCallback(ctx) {
 // Authentication for internal accounts
 router.post('/login', bodyParser(), auth, login);
 router.post('/logout/', auth, logout);
-router.get('/refresh/:id([0-9]{1,})', refresh);
+router.get('/refresh/:ID([0-9]{1,})', refresh);
 
 // Authentication for Google accounts
 router.get('/google', googleAuth);

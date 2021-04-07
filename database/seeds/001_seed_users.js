@@ -38,8 +38,16 @@ exports.seed = async function seed(knex) {
 		imgURL: 'https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png'
 	});
 
+	const staff2 = await hashPassword({
+		username: 'anotherStaff',
+		password: 'password',
+		firstName: 'Staff',
+		lastName: 'User',
+		imgURL: 'https://icon-library.com/images/staff-icon/staff-icon-5.jpg'
+	});
+
 	// Deletes ALL existing entries
 	return knex('users').del()
 		// Inserts seed entries
-		.then(() => knex('users').insert([admin, staff, example]));
+		.then(() => knex('users').insert([admin, staff, example, staff2]));
 };

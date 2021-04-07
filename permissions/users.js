@@ -88,11 +88,11 @@ exports.readAll = async function readAll(requester) {
  * @returns {Object} - A permissions Object that grants the user and filters the resource.
  */
 exports.read = async function read(requester, data) {
-	let { id } = data;
-	id = parseInt(id, 10);
+	let { ID } = data;
+	ID = parseInt(ID, 10);
 	return ac
 		.can(requester.role)
-		.context({ requester: requester.ID, owner: id })
+		.context({ requester: requester.ID, owner: ID })
 		.execute('read')
 		.on('user');
 };
@@ -104,11 +104,11 @@ exports.read = async function read(requester, data) {
  * @returns {Object} - A permissions Object that grants the user and filters the resource.
  */
 exports.update = async function update(requester, data) {
-	let { id } = data;
-	id = parseInt(id, 10);
+	let { ID } = data;
+	ID = parseInt(ID, 10);
 	return ac
 		.can(requester.role)
-		.context({ requester: requester.ID, owner: id })
+		.context({ requester: requester.ID, owner: ID })
 		.execute('update')
 		.on('user');
 };
@@ -120,11 +120,11 @@ exports.update = async function update(requester, data) {
  * @returns {Object} - A permissions Object that grants the user and filters the resource.
  */
 exports.deleteUser = async function deleteUser(requester, data) {
-	let { id } = data;
-	id = parseInt(id, 10);
+	let { ID } = data;
+	ID = parseInt(ID, 10);
 	return ac
 		.can(requester.role)
-		.context({ requester: requester.ID, owner: id })
+		.context({ requester: requester.ID, owner: ID })
 		.execute('delete')
 		.on('user');
 };

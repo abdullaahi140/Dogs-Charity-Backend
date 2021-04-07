@@ -45,6 +45,7 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
+    "@types/jest": "^26.0.22",
     "docdash": "^1.2.0",
     "eslint": "^7.23.0",
     "eslint-config-airbnb-base": "^14.2.1",

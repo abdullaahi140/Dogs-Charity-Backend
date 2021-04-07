@@ -92,7 +92,7 @@
 			"type": "object",
 			"properties": {
 				"ID": {
-					"description": "ID of the updated user record",
+					"description": "ID of the user record",
 					"type": "number",
 					"examples": [
 						1
@@ -126,7 +126,7 @@
 						"https://visualpharm.com/assets/314/Admin-595b40b65ba036ed117d36fe.svg"
 					]
 				},
-				"dateCreated": {
+				"dateRegistered": {
 					"description": "The datetime of the account being created",
 					"type": "string",
 					"minLength": 19,
@@ -201,6 +201,7 @@
 					]
 				}
 			},
+			"minProperties": 1,
 			"additionalProperties": false
 		},
 		"userID": {
@@ -209,17 +210,14 @@
 			"description": "The user's ID number.",
 			"type": "object",
 			"properties": {
-				"id": {
+				"ID": {
 					"description": "ID of the updated user record",
 					"type": "number",
 					"examples": [
 						1
 					]
 				}
-			},
-			"required": [
-				"id"
-			]
+			}
 		},
 		"userList": {
 			"$id": "#userList",
@@ -237,7 +235,7 @@
 			"type": "object",
 			"properties": {
 				"ID": {
-					"description": "ID of the updated user record",
+					"description": "ID of the created user record",
 					"type": "number",
 					"examples": [
 						1
@@ -297,7 +295,7 @@
 			"type": "object",
 			"properties": {
 				"ID": {
-					"description": "ID of the updated user record",
+					"description": "ID of the deleted user record",
 					"type": "number",
 					"examples": [
 						1
