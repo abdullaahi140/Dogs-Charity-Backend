@@ -32,7 +32,7 @@ exports.add = async function add(user) {
 /**
  * Function that removes a user's refresh token from the database.
  * @param {Object} userID - The ID of the user
- * @returns {integer} - The number of rows deleted by the database
+ * @returns {number} - The number of rows deleted by the database
  * @throws {KnexError} - Re-raise and sanitise DB errors
  */
 exports.delById = async function delById(userID) {
