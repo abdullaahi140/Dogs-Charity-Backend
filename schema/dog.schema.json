@@ -1,0 +1,264 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"definitions": {
+		"dog": {
+			"$id": "#dog",
+			"title": "Dog",
+			"description": "Data to register a new dog.",
+			"type": "object",
+			"properties": {
+				"name": {
+					"description": "The name of the dog",
+					"type": "string",
+					"minLength": 2,
+					"examples": [
+						"George"
+					]
+				},
+				"age": {
+					"description": "The age of the dog",
+					"type": "number",
+					"examples": [
+						1
+					]
+				},
+				"breed": {
+					"description": "The breed of the dog",
+					"type": "string",
+					"minLength": 3,
+					"examples": [
+						"Rottweiler"
+					]
+				},
+				"description": {
+					"description": "A small description of the dog",
+					"type": "string",
+					"minLength": 5,
+					"examples": [
+						"A beautiful rottweiler."
+					]
+				}
+			},
+			"required": [
+				"name"
+			],
+			"additionalProperties": false
+		},
+		"dogView": {
+			"$id": "#dogView",
+			"title": "Dog View",
+			"description": "Data visible to all dogs of the API.",
+			"type": "object",
+			"properties": {
+				"ID": {
+					"description": "ID of the dog",
+					"type": "number",
+					"examples": [
+						1
+					]
+				},
+				"name": {
+					"description": "The name of the dog",
+					"type": "string",
+					"minLength": 2,
+					"examples": [
+						"George"
+					]
+				},
+				"age": {
+					"description": "The age of the dog",
+					"type": "number",
+					"examples": [
+						1
+					]
+				},
+				"breed": {
+					"description": "The breed of the dog",
+					"type": "string",
+					"minLength": 3,
+					"examples": [
+						"Rottweiler"
+					]
+				},
+				"description": {
+					"description": "A small description of the dog",
+					"type": "string",
+					"minLength": 5,
+					"examples": [
+						"A beautiful rottweiler."
+					]
+				},
+				"dateAdded": {
+					"description": "The datetime of the dog added to the API",
+					"type": "string",
+					"minLength": 19,
+					"examples": [
+						"2021-03-30 10:50:24"
+					]
+				},
+				"dateModified": {
+					"description": "The datetime of the dog's details being modified",
+					"type": "string",
+					"minLength": 19,
+					"examples": [
+						"2021-03-30 18:50:24"
+					]
+				},
+				"locationID": {
+					"description": "ID of the location that the dog is registered to",
+					"type": "number",
+					"examples": [
+						1
+					]
+				}
+			}
+		},
+		"dogUpdate": {
+			"$id": "#dogUpdate",
+			"title": "Dog Update",
+			"description": "Data used to update a dog's details.",
+			"type": "object",
+			"properties": {
+				"name": {
+					"description": "The name of the dog",
+					"type": "string",
+					"minLength": 2,
+					"examples": [
+						"George"
+					]
+				},
+				"age": {
+					"description": "The age of the dog",
+					"type": "number",
+					"examples": [
+						1
+					]
+				},
+				"breed": {
+					"description": "The breed of the dog",
+					"type": "string",
+					"minLength": 3,
+					"examples": [
+						"Rottweiler"
+					]
+				},
+				"description": {
+					"description": "A small description of the dog",
+					"type": "string",
+					"minLength": 5,
+					"examples": [
+						"A beautiful rottweiler."
+					]
+				}
+			},
+			"minProperties": 1,
+			"additionalProperties": false
+		},
+		"dogID": {
+			"$id": "#dogID",
+			"title": "Dog ID",
+			"description": "The dog's ID number.",
+			"type": "object",
+			"properties": {
+				"ID": {
+					"description": "ID of the dog",
+					"type": "number",
+					"examples": [
+						1
+					]
+				}
+			}
+		},
+		"dogList": {
+			"$id": "#dogList",
+			"title": "Dog List",
+			"description": "List of all the dogs in the API.",
+			"type": "array",
+			"items": {
+				"$ref": "#/definitions/dogView"
+			}
+		},
+		"dogAdded": {
+			"$id": "#dogAdded",
+			"title": "Dog Added",
+			"description": "Confirmation of a successful dog addition",
+			"type": "object",
+			"properties": {
+				"ID": {
+					"description": "ID of the created dog record",
+					"type": "number",
+					"examples": [
+						1
+					]
+				},
+				"created": {
+					"description": "Boolean indicator of success",
+					"type": "boolean",
+					"examples": [
+						true
+					]
+				},
+				"link": {
+					"description": "Path to retrieve dog record",
+					"type": "string",
+					"format": "uri",
+					"examples": [
+						"http://localhost/api/v1/dogs/1"
+					]
+				}
+			}
+		},
+		"dogUpdated": {
+			"$id": "#dogUpdated",
+			"title": "Dog Updated",
+			"description": "Confirmation of a successful dog update/creation",
+			"type": "object",
+			"properties": {
+				"ID": {
+					"description": "ID of the updated dog record",
+					"type": "number",
+					"examples": [
+						1
+					]
+				},
+				"updated": {
+					"description": "Boolean indicator of success",
+					"type": "boolean",
+					"examples": [
+						true
+					]
+				},
+				"link": {
+					"description": "Path to retrieve dog record",
+					"type": "string",
+					"format": "uri",
+					"examples": [
+						"http://localhost/api/v1/dogs/1"
+					]
+				}
+			}
+		},
+		"dogDeleted": {
+			"$id": "#dogDeleted",
+			"title": "Dog Deleted",
+			"description": "Confirmation of a successful deletion",
+			"type": "object",
+			"properties": {
+				"ID": {
+					"description": "ID of the deleted dog record",
+					"type": "number",
+					"examples": [
+						1
+					]
+				},
+				"deleted": {
+					"description": "Boolean indicator of success",
+					"type": "boolean",
+					"examples": [
+						true
+					]
+				}
+			}
+		}
+	}
+}
