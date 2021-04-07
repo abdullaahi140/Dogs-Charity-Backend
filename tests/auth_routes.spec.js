@@ -1,16 +1,16 @@
 const request = require('supertest');
 const app = require('../app.js');
+const { genJwtAccessToken } = require('../helpers/jwtToken.js');
 
+/* eslint-disable no-console */
 // Hide console errors that are expected
 beforeAll(async () => {
 	jest.spyOn(console, 'error');
-	// eslint-disable-next-line no-console
 	console.error.mockImplementation(() => null);
 });
 
 // Return console error to original state
 afterAll(async () => {
-	// eslint-disable-next-line no-console
 	console.error.mockRestore();
 });
 
@@ -53,10 +53,10 @@ describe('Authenticating users using JWT', () => {
 	});
 
 	test('Sending incorrect JWT should not authorise', async () => {
-		const invalidJwt = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiI2MDAzQ0VNIEtvYSBTZXJ2ZXIiLCJhdWQiOiI2MDBDRU0gU1BBIiwic3ViIjo2LCJuYW1lIjoibm9uRXhpc3RlbnRVc2VyIiwicHJvdmlkZXIiOiJpbnRlcm5hbCIsImlhdCI6MTYxNzMzMzAyMSwiZXhwIjoxNjE3MzMzNjIxfQ.HZn4qlO5krZ4y6T5aBLSzXbeMjXzbr1sP6y55AJ5eWI';
+		const invalidJWT = await genJwtAccessToken(100, 'nonExistentUser');
 		const res = await request(app.callback())
-			.get('/api/v1/users/3')
-			.set('Authorization', `Bearer ${invalidJwt}`);
+			.get('/api/v1/users/2')
+			.set('Authorization', `Bearer ${invalidJWT}`);
 		expect(res.statusCode).toEqual(401);
 	});
 
