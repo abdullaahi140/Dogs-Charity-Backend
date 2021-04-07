@@ -13,8 +13,9 @@ const { knex, KnexError } = require('../database/knex.js');
  * @throws {KnexError} - Re-raise and sanitise DB errors
  */
 exports.getAll = async function getAll() {
-	return knex.from('users').select('users.*', 'roles.role')
+	return knex.from('users').select('users.*', 'roles.role', 'staff_locations.locationID')
 		.leftJoin('roles', 'users.ID', 'roles.userID')
+		.leftJoin('staff_locations', 'users.ID', 'staffID')
 		.catch((error) => KnexError(error));
 };
 
@@ -26,9 +27,10 @@ exports.getAll = async function getAll() {
  * @throws {KnexError} - Re-raise and sanitise DB errors
  */
 exports.getById = async function getById(ID, provider = 'internal') {
-	return knex.from('users').select('users.*', 'roles.role')
+	return knex.from('users').select('users.*', 'roles.role', 'staff_locations.locationID')
 		.where({ ID, provider })
 		.leftJoin('roles', 'users.ID', 'roles.userID')
+		.leftJoin('staff_locations', 'users.ID', 'staffID')
 		.catch((error) => KnexError(error));
 };
 
@@ -40,9 +42,10 @@ exports.getById = async function getById(ID, provider = 'internal') {
  * @throws {KnexError} - Re-raise and sanitise DB errors
  */
 exports.getByUsername = async function getByUsername(username, provider = 'internal') {
-	return knex.from('users').select('users.*', 'roles.role')
+	return knex.from('users').select('users.*', 'roles.role', 'staff_locations.locationID')
 		.where({ username, provider })
 		.leftJoin('roles', 'users.ID', 'roles.userID')
+		.leftJoin('staff_locations', 'users.ID', 'staffID')
 		.catch((error) => KnexError(error));
 };
 

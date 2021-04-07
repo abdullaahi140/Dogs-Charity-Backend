@@ -11,6 +11,8 @@ const bodyParser = require('koa-bodyparser');
 const userModel = require('../models/users.js');
 const roleModel = require('../models/roles.js');
 const refreshModel = require('../models/refresh.js');
+const locationsModel = require('../models/locations.js');
+const staffLocationsModel = require('../models/staff_locations.js');
 
 const hashPassword = require('../helpers/hashPassword.js');
 const jwt = require('../helpers/jwtToken.js');
@@ -57,22 +59,42 @@ async function getById(ctx) {
 }
 
 /**
+ *
+ * @param {number} staffID - The staff's ID number
+ * @param {number} staffCode - The staff code for a charity location
+ * @returns {boolean} - Boolean on success of getting location and adding staff ID
+ */
+// eslint-disable-next-line consistent-return
+async function checkStaffRole(staffID, staffCode) {
+	try {
+		let result = await locationsModel.getByStaffId(staffCode);
+		if (result.length) {
+			const locationID = result[0].ID;
+			result = await staffLocationsModel.add(staffID, locationID);
+			return true;
+		}
+	} catch (error) {
+		return false;
+	}
+}
+
+/**
  * Route that gets all users from the database
  * @param {Object} ctx - The Koa request/response context object
  */
 async function createUser(ctx) {
 	const { staffCode, ...body } = await hashPassword(ctx.request.body);
 	// checking for staff code
-	const role = (staffCode === process.env.STAFF_CODE) ? 'staff' : 'user';
-	const userWithRole = { role };
+	// const role = (staffCode === process.env.STAFF_CODE) ? 'staff' : 'user';
 
 	let ID;
 	try {
 		let result = await userModel.add(body);
 		if (result.length) {
 			[ID] = result; // setting ID to first element in result
-			ctx.status = 201;
-			userWithRole.userID = ID;
+			// check for staff role using staffCode to find chairty location
+			const role = (await checkStaffRole(ID, staffCode)) ? 'staff' : 'user';
+			const userWithRole = { role, userID: ID };
 			result = await roleModel.add(userWithRole);
 		}
 
@@ -83,13 +105,14 @@ async function createUser(ctx) {
 		}
 
 		if (result.length) {
-			const link = `${ctx.protocol}://${ctx.request.header.host}${ctx.originalUrl}`;
+			const link = `${ctx.protocol}://${ctx.request.header.host}${ctx.originalUrl}/${ID}`;
 			ctx.body = {
 				ID,
 				created: true,
 				accessToken,
 				link
 			};
+			ctx.status = 201;
 		}
 	} catch (error) {
 		ctx.body = { created: false };
