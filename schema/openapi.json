@@ -27,8 +27,52 @@
 		{
 			"name": "Authentication",
 			"description": "API endpoints for authentication."
+		},
+		{
+			"name": "Dogs",
+			"description": "API endpoints for dog management."
 		}
 	],
+	"components": {
+		"schemas": {
+			"createFailed": {
+				"type": "object",
+				"properties": {
+					"created": {
+						"description": "Boolean indicator of success",
+						"type": "boolean",
+						"examples": [
+							false
+						]
+					}
+				}
+			},
+			"updateFailed": {
+				"type": "object",
+				"properties": {
+					"updated": {
+						"description": "Boolean indicator of success",
+						"type": "boolean",
+						"examples": [
+							false
+						]
+					}
+				}
+			},
+			"deleteFailed": {
+				"type": "object",
+				"properties": {
+					"deleted": {
+						"description": "Boolean indicator of success",
+						"type": "boolean",
+						"examples": [
+							false
+						]
+					}
+				}
+			}
+		}
+	},
 	"paths": {
 		"/users": {
 			"summary": "Represents an individual user",
@@ -59,6 +103,16 @@
 								}
 							}
 						}
+					},
+					"404": {
+						"description": "Account was not created",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/createFailed"
+								}
+							}
+						}
 					}
 				}
 			},
@@ -79,6 +133,9 @@
 						}
 					},
 					"401": {
+						"description": "Unauthorised."
+					},
+					"403": {
 						"description": "Only admin users can list all accounts."
 					}
 				}
@@ -136,7 +193,7 @@
 					}
 				},
 				"responses": {
-					"200": {
+					"201": {
 						"description": "Confirmation and link to record.",
 						"content": {
 							"application/json": {
@@ -145,6 +202,9 @@
 								}
 							}
 						}
+					},
+					"403": {
+						"description": "Users and staff can only update their own account."
 					},
 					"404": {
 						"description": "Not found."
@@ -270,7 +330,7 @@
 						}
 					},
 					"404": {
-						"description": "Not found"
+						"description": "Not found."
 					}
 				}
 			}
@@ -301,7 +361,222 @@
 						}
 					},
 					"404": {
-						"description": "Not found"
+						"description": "Not found."
+					}
+				}
+			}
+		},
+		"/dogs": {
+			"summary": "Represents an individual dog",
+			"description": "This resource represents an individual dog in the system. Each dog is identified by a numeric `ID`.\n",
+			"post": {
+				"tags": [
+					"Dogs"
+				],
+				"description": "Add a new dog to the API.",
+				"requestBody": {
+					"description": "All new dog data.",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "./dog.schema.json#/definitions/dog"
+							}
+						}
+					}
+				},
+				"responses": {
+					"201": {
+						"description": "Dog added.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "./dog.schema.json#/definitions/dogAdded"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Dog was not added"
+					}
+				}
+			},
+			"get": {
+				"tags": [
+					"Dogs"
+				],
+				"description": "Get a list of all dogs.",
+				"responses": {
+					"200": {
+						"description": "List of dogs.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "./dog.schema.json#/definitions/dogList"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Not found."
+					}
+				}
+			}
+		},
+		"dogs/{name}{breed}": {
+			"parameters": [
+				{
+					"in": "query",
+					"name": "name",
+					"schema": {
+						"description": "The name of the dog",
+						"type": "string",
+						"minLength": 2,
+						"examples": [
+							"George"
+						]
+					}
+				},
+				{
+					"in": "query",
+					"name": "breed",
+					"schema": {
+						"description": "The breed of the dog",
+						"type": "string",
+						"minLength": 3,
+						"examples": [
+							"Rottweiler"
+						]
+					}
+				}
+			],
+			"get": {
+				"tags": [
+					"Dogs"
+				],
+				"description": "Filter dogs by name and/or breed",
+				"responses": {
+					"200": {
+						"description": "View of filtered dog records.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "./dog.schema.json#/definitions/dogList"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Not found."
+					}
+				}
+			}
+		},
+		"dogs/{ID}": {
+			"parameters": [
+				{
+					"in": "path",
+					"name": "ID",
+					"schema": {
+						"$ref": "./dog.schema.json#/definitions/dogID"
+					},
+					"required": true
+				}
+			],
+			"get": {
+				"tags": [
+					"Dogs"
+				],
+				"description": "Get dog by ID.",
+				"responses": {
+					"200": {
+						"description": "View of dog record.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "./dog.schema.json#/definitions/dogView"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Not found."
+					}
+				}
+			},
+			"put": {
+				"tags": [
+					"Dogs"
+				],
+				"description": "Update dog by ID.",
+				"requestBody": {
+					"description": "Update the dog's details.",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "./dog.schema.json#/definitions/dogUpdate"
+							}
+						}
+					}
+				},
+				"responses": {
+					"201": {
+						"description": "Confirmation and link to record.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "./dog.schema.json#/definitions/dogUpdated"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Only logged in staff and admins can update records."
+					},
+					"403": {
+						"description": "Only staff at the same shelter as the dog can update the record."
+					},
+					"404": {
+						"description": "Not found.",
+						"content":{
+							"application/json":{
+								"schema":{
+									"$ref": "#/components/schemas/updateFailed"
+								}
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"tags": [
+					"Dogs"
+				],
+				"description": "Delete dog by ID.",
+				"responses": {
+					"200": {
+						"description": "Confirmation of deletion.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "./dog.schema.json#/definitions/dogDeleted"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Only authenticated users can delete their own accounts."
+					},
+					"404": {
+						"description": "Not found.",
+						"content":{
+							"application/json":{
+								"schema":{
+									"$ref": "#/components/schemas/deleteFailed"
+								}
+							}
+						}
 					}
 				}
 			}
