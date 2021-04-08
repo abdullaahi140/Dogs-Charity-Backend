@@ -35,6 +35,18 @@
 	],
 	"components": {
 		"schemas": {
+			"createPassed": {
+				"type": "object",
+				"properties": {
+					"created": {
+						"description": "Boolean indicator of success",
+						"type": "boolean",
+						"examples": [
+							true
+						]
+					}
+				}
+			},
 			"createFailed": {
 				"type": "object",
 				"properties": {
@@ -55,6 +67,18 @@
 						"type": "boolean",
 						"examples": [
 							false
+						]
+					}
+				}
+			},
+			"deletePassed": {
+				"type": "object",
+				"properties": {
+					"deleted": {
+						"description": "Boolean indicator of success",
+						"type": "boolean",
+						"examples": [
+							true
 						]
 					}
 				}
@@ -539,9 +563,9 @@
 					},
 					"404": {
 						"description": "Not found.",
-						"content":{
-							"application/json":{
-								"schema":{
+						"content": {
+							"application/json": {
+								"schema": {
 									"$ref": "#/components/schemas/updateFailed"
 								}
 							}
@@ -570,6 +594,100 @@
 					},
 					"404": {
 						"description": "Not found.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/deleteFailed"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"dogs/fav": {
+			"get": {
+				"tags": [
+					"Dogs"
+				],
+				"description": "Get all of a user's favourite dogs.",
+				"responses": {
+					"200": {
+						"description": "All of user's favourite dogs.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "./dog.schema.json#/definitions/dogList"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Only authenticated users can have favourite dogs."
+					},
+					"404": {
+						"description": "The user has no favourite dogs."
+					}
+				}
+			}
+		},
+		"dogs/fav/{ID}": {
+			"parameters": [
+				{
+					"in": "path",
+					"name": "ID",
+					"schema": {
+						"$ref": "./dog.schema.json#/definitions/dogID"
+					},
+					"required": true
+				}
+			],
+			"post": {
+				"tags": [
+					"Dogs"
+				],
+				"description": "Favourite a dog as an authenticated user.",
+				"responses": {
+					"201": {
+						"description": "The dog was added as favourite.",
+						"content":{
+							"application/json":{
+								"schema":{
+									"$ref": "#/components/schemas/createPassed"
+								}
+							}
+						}
+					},
+					"404":{
+						"description": "The dog could not be added as favourite.",
+						"content":{
+							"application/json":{
+								"schema":{
+									"$ref": "#/components/schemas/createFailed"
+								}
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"tags": [
+					"Dogs"
+				],
+				"description": "Remove a favourite a dog as an authenticated user.",
+				"responses": {
+					"201": {
+						"description": "The dog was deleted as favourite.",
+						"content":{
+							"application/json":{
+								"schema":{
+									"$ref": "#/components/schemas/deletePassed"
+								}
+							}
+						}
+					},
+					"404":{
+						"description": "The dog could not be deleted as favourite.",
 						"content":{
 							"application/json":{
 								"schema":{
