@@ -58,7 +58,9 @@ async function logout(ctx) {
 	if (ctx.state.user.ID === parseInt(ID, 10)) {
 		const result = await model.delById(ID);
 		ctx.state.user = {};
-		ctx.body = { affectedRows: result, loggedOut: true };
+		if (result === 1) {
+			ctx.body = { affectedRows: result, loggedOut: true };
+		}
 	}
 }
 
