@@ -1,0 +1,86 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"definitions": {
+		"chat": {
+			"title": "Chat",
+			"description": "A chat in the database.",
+			"type":"object",
+			"properties": {
+				"ID": {
+					"description": "ID of the chat",
+					"type": "number",
+					"examples": [
+						1
+					]
+				},
+				"userID": {
+					"description": "ID of the user who started the chat",
+					"type": "number",
+					"examples": [
+						3
+					]
+				},
+				"locationID": {
+					"description": "ID of the charity",
+					"type": "number",
+					"examples": [
+						2
+					]
+				},
+				"dateCreated": {
+					"description": "The datetime of the chat being created",
+					"type": "string",
+					"minLength": 19,
+					"examples": [
+						"2021-03-30 10:50:24"
+					]
+				},
+				"dateModified": {
+					"description": "The datetime of the chat being modified",
+					"type": "string",
+					"minLength": 19,
+					"examples": [
+						"2021-03-30 18:50:24"
+					]
+				}
+			}
+		},
+		"chatList": {
+			"title": "Chat List",
+			"description": "List of all chats in the API.",
+			"type": "array",
+			"items": {
+				"$ref": "#/definitions/chat"
+			}
+		},
+		"chatCreated": {
+			"title": "Chat Created",
+			"description": "Confirmation of a successful chat creation",
+			"type": "object",
+			"properties": {
+				"ID": {
+					"description": "ID of the created chat record",
+					"type": "number",
+					"examples": [
+						1
+					]
+				},
+				"created": {
+					"description": "Boolean indicator of success",
+					"type": "boolean",
+					"examples": [
+						true
+					]
+				},
+				"link": {
+					"description": "Path to retrieve messages for the created chat",
+					"type": "string",
+					"format": "uri",
+					"examples": [
+						"http://localhost/api/v1/messages/1"
+					]
+				}
+			}
+		}
+	}
+}
