@@ -368,6 +368,8 @@
 			}
 		},
 		"/auth/google": {
+			"summary": "Authenticating with Google",
+			"description": "This resource represents  ",
 			"get": {
 				"tags": [
 					"Authentication"
@@ -455,7 +457,9 @@
 				}
 			}
 		},
-		"dogs/{name}{breed}": {
+		"/dogs{name}{breed}": {
+			"summary": "Represents filtered dogs",
+			"description": "This resource represents a list of dogs filtered by name and/or breed.",
 			"parameters": [
 				{
 					"in": "query",
@@ -504,7 +508,7 @@
 				}
 			}
 		},
-		"dogs/{ID}": {
+		"/dogs/{ID}": {
 			"parameters": [
 				{
 					"in": "path",
@@ -613,7 +617,7 @@
 				}
 			}
 		},
-		"dogs/fav": {
+		"/dogs/fav": {
 			"get": {
 				"tags": [
 					"Dogs"
@@ -639,7 +643,7 @@
 				}
 			}
 		},
-		"dogs/fav/{ID}": {
+		"/dogs/fav/{ID}": {
 			"parameters": [
 				{
 					"in": "path",
@@ -707,7 +711,7 @@
 				}
 			}
 		},
-		"chats/": {
+		"/chats": {
 			"summary": "Represents an individual chat",
 			"description": "This resource represents an individual chat in the system. Each chat is identified by a numeric `ID`.\n",
 			"get": {
@@ -735,7 +739,7 @@
 				}
 			}
 		},
-		"chats/{locationID}": {
+		"/chats/{locationID}": {
 			"parameters": [
 				{
 					"in": "path",
@@ -802,7 +806,7 @@
 				}
 			}
 		},
-		"chats/{ID}": {
+		"/chats/{ID}": {
 			"parameters": [
 				{
 					"in": "path",
@@ -846,7 +850,7 @@
 				}
 			}
 		},
-		"messages/{chatID}": {
+		"/messages/{chatID}": {
 			"parameters": [
 				{
 					"in": "path",
@@ -920,7 +924,7 @@
 				}
 			}
 		},
-		"messages/{ID}": {
+		"/messages/{ID}": {
 			"parameters": [
 				{
 					"in": "path",
