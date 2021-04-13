@@ -42,11 +42,7 @@ async function genTokens(ctx, provider = 'internal') {
  * @param {Object} ctx - The Koa request/response context object
  */
 async function login(ctx) {
-	try {
-		await genTokens(ctx);
-	} catch (err) {
-		ctx.status = 404;
-	}
+	await genTokens(ctx);
 }
 
 /**
@@ -85,12 +81,7 @@ async function refresh(ctx) {
  * @param {Object} ctx - The Koa request/response context object
  */
 async function googleCallback(ctx) {
-	ctx.body = ctx.state.user;
-	try {
-		await genTokens(ctx, 'google');
-	} catch (err) {
-		ctx.status = 404;
-	}
+	await genTokens(ctx, 'google');
 }
 
 // Authentication for internal accounts
