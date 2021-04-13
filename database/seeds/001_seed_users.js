@@ -30,7 +30,7 @@ exports.seed = async function seed(knex) {
 		imgURL: 'https://icon-library.com/images/staff-icon/staff-icon-5.jpg'
 	});
 
-	const example = await hashPassword({
+	const user = await hashPassword({
 		username: 'user',
 		password: 'password',
 		firstName: 'Example',
@@ -46,8 +46,16 @@ exports.seed = async function seed(knex) {
 		imgURL: 'https://icon-library.com/images/staff-icon/staff-icon-5.jpg'
 	});
 
+	const user2 = await hashPassword({
+		username: 'anotherUser',
+		password: 'password',
+		firstName: 'User',
+		lastName: 'User',
+		imgURL: 'https://icon-library.com/images/staff-icon/staff-icon-5.jpg'
+	});
+
 	// Deletes ALL existing entries
 	return knex('users').del()
 		// Inserts seed entries
-		.then(() => knex('users').insert([admin, staff, example, staff2]));
+		.then(() => knex('users').insert([admin, staff, user, staff2, user2]));
 };

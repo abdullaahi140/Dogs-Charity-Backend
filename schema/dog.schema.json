@@ -1,8 +1,7 @@
 {
-	"$schema": "http://json-schema.org/draft-07/schema#",
+	"$schema": "http://json-schema.org/draft-07/schema",
 	"definitions": {
 		"dog": {
-			"$id": "#dog",
 			"title": "Dog",
 			"description": "Data to register a new dog.",
 			"type": "object",
@@ -45,7 +44,6 @@
 			"additionalProperties": false
 		},
 		"dogView": {
-			"$id": "#dogView",
 			"title": "Dog View",
 			"description": "Data visible to all dogs of the API.",
 			"type": "object",
@@ -114,7 +112,6 @@
 			}
 		},
 		"dogUpdate": {
-			"$id": "#dogUpdate",
 			"title": "Dog Update",
 			"description": "Data used to update a dog's details.",
 			"type": "object",
@@ -155,7 +152,6 @@
 			"additionalProperties": false
 		},
 		"dogID": {
-			"$id": "#dogID",
 			"title": "Dog ID",
 			"description": "The dog's ID number.",
 			"type": "object",
@@ -170,7 +166,6 @@
 			}
 		},
 		"dogList": {
-			"$id": "#dogList",
 			"title": "Dog List",
 			"description": "List of all the dogs in the API.",
 			"type": "array",
@@ -179,7 +174,6 @@
 			}
 		},
 		"dogAdded": {
-			"$id": "#dogAdded",
 			"title": "Dog Added",
 			"description": "Confirmation of a successful dog addition",
 			"type": "object",
@@ -209,7 +203,6 @@
 			}
 		},
 		"dogUpdated": {
-			"$id": "#dogUpdated",
 			"title": "Dog Updated",
 			"description": "Confirmation of a successful dog update/creation",
 			"type": "object",
@@ -239,18 +232,10 @@
 			}
 		},
 		"dogDeleted": {
-			"$id": "#dogDeleted",
 			"title": "Dog Deleted",
 			"description": "Confirmation of a successful deletion",
 			"type": "object",
 			"properties": {
-				"ID": {
-					"description": "ID of the deleted dog record",
-					"type": "number",
-					"examples": [
-						1
-					]
-				},
 				"deleted": {
 					"description": "Boolean indicator of success",
 					"type": "boolean",

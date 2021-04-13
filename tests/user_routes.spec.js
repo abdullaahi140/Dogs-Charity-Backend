@@ -14,12 +14,12 @@ afterAll(async () => {
 });
 
 describe('Getting users', () => {
-	test('get all 3 defualt users', async () => {
+	test('get all 5 defualt users', async () => {
 		const res = await request(app.callback())
 			.get('/api/v1/users')
 			.auth('admin', 'admin');
 		expect(res.statusCode).toEqual(200);
-		expect(res.body).toHaveLength(4);
+		expect(res.body).toHaveLength(5);
 	});
 
 	test('non-admin user should not see all users', async () => {
@@ -80,10 +80,10 @@ describe('Create a new user', () => {
 
 	test('new user should have user role', async () => {
 		const res = await request(app.callback())
-			.get('/api/v1/users/5')
+			.get('/api/v1/users/6')
 			.auth('example', 'password');
 		expect(res.statusCode).toEqual(200);
-		expect(res.body).toHaveProperty('ID', 5);
+		expect(res.body).toHaveProperty('ID', 6);
 		expect(res.body).toHaveProperty('username', 'example');
 		expect(res.body).toHaveProperty('role', 'user');
 	});
@@ -97,7 +97,7 @@ describe('Create a new user', () => {
 				staffCode: 'xJZUFO82@ivDBMWX'
 			});
 		const checkRole = await request(app.callback())
-			.get('/api/v1/users/6')
+			.get('/api/v1/users/7')
 			.auth('exampleStaff', 'staffPassword');
 		expect(res.statusCode).toEqual(201);
 		expect(res.body.created).toBeTruthy();
@@ -121,7 +121,7 @@ describe('Create a new user', () => {
 describe('Update user account', () => {
 	test('retrieve example user original details', async () => {
 		const res = await request(app.callback())
-			.get('/api/v1/users/5')
+			.get('/api/v1/users/6')
 			.auth('example', 'password');
 		expect(res.statusCode).toEqual(200);
 		expect(res.body).toHaveProperty('username', 'example');
@@ -129,7 +129,7 @@ describe('Update user account', () => {
 
 	test('update example user', async () => {
 		const res = await request(app.callback())
-			.put('/api/v1/users/5')
+			.put('/api/v1/users/6')
 			.auth('example', 'password')
 			.send({
 				username: 'updatedUser',
@@ -152,7 +152,7 @@ describe('Update user account', () => {
 
 	test('updated user should have different username', async () => {
 		const res = await request(app.callback())
-			.get('/api/v1/users/5')
+			.get('/api/v1/users/6')
 			.auth('updatedUser', 'newPassword');
 		expect(res.statusCode).toEqual(200);
 		expect(res.body).toHaveProperty('username', 'updatedUser');
@@ -160,29 +160,29 @@ describe('Update user account', () => {
 });
 
 describe('Deleting user account', () => {
-	test('there should be 6 accounts before deleting', async () => {
+	test('there should be 7 accounts before deleting', async () => {
+		const res = await request(app.callback())
+			.get('/api/v1/users')
+			.auth('admin', 'admin');
+		expect(res.statusCode).toEqual(200);
+		expect(res.body).toHaveLength(7);
+	});
+
+	test('delete a user account', async () => {
+		const res = await request(app.callback())
+			.delete('/api/v1/users/6')
+			.auth('updatedUser', 'newPassword');
+		expect(res.statusCode).toEqual(200);
+		expect(res.body).toHaveProperty('ID', '6');
+		expect(res.body.deleted).toBeTruthy();
+	});
+
+	test('there should be 6 accounts after deleting', async () => {
 		const res = await request(app.callback())
 			.get('/api/v1/users')
 			.auth('admin', 'admin');
 		expect(res.statusCode).toEqual(200);
 		expect(res.body).toHaveLength(6);
-	});
-
-	test('delete a user account', async () => {
-		const res = await request(app.callback())
-			.delete('/api/v1/users/5')
-			.auth('updatedUser', 'newPassword');
-		expect(res.statusCode).toEqual(200);
-		expect(res.body).toHaveProperty('ID', '5');
-		expect(res.body.deleted).toBeTruthy();
-	});
-
-	test('there should be 5 accounts after deleting', async () => {
-		const res = await request(app.callback())
-			.get('/api/v1/users')
-			.auth('admin', 'admin');
-		expect(res.statusCode).toEqual(200);
-		expect(res.body).toHaveLength(5);
 	});
 
 	test("user cannot delete another user's account", async () => {

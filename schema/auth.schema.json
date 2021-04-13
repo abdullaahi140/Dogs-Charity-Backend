@@ -2,7 +2,6 @@
 	"$schema": "http://json-schema.org/draft-07/schema",
 	"definitions": {
 		"user": {
-			"$id": "#user",
 			"title": "User",
 			"description": "Data to authenticate a returning user.",
 			"type": "object",
@@ -31,7 +30,6 @@
 			"additionalProperties": false
 		},
 		"userAuthenticated": {
-			"$id": "#authenticatedUser",
 			"title": "Authenticated user",
 			"description": "The user has successfully authenticated.",
 			"type": "object",
@@ -47,7 +45,6 @@
 			}
 		},
 		"userLoggedOut": {
-			"$id": "#userLoggedOut",
 			"title": "Logged out user",
 			"description": "The user has successfully logged out.",
 			"type": "object",

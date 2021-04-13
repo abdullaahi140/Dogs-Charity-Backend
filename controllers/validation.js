@@ -11,6 +11,7 @@ const userSchema = require('../schema/user.schema.json').definitions.user;
 const userUpdateSchema = require('../schema/user.schema.json').definitions.userUpdate;
 const dogSchema = require('../schema/dog.schema.json').definitions.dog;
 const dogUpdateSchema = require('../schema/dog.schema.json').definitions.dogUpdate;
+const messageSchema = require('../schema/message.schema.json').definitions.message;
 
 /**
  * Wrapper that returns a Koa middleware validator for a given schema.
@@ -57,7 +58,9 @@ const makeKoaValidator = function makeKoaValidator(schema, resource) {
 exports.valUser = makeKoaValidator(userSchema, 'user');
 // Validate data against user schema for updating existing users
 exports.valUserUpdate = makeKoaValidator(userUpdateSchema, 'userUpdate');
-// Validate data against user schema for creating new users
+// Validate data against user schema for creating new dogs
 exports.valDog = makeKoaValidator(dogSchema, 'dog');
-// Validate data against user schema for updating existing users
+// Validate data against user schema for updating existing dogs
 exports.valDogUpdate = makeKoaValidator(dogUpdateSchema, 'dogUpdate');
+// Validate data against user schema for creating new messages
+exports.valMessage = makeKoaValidator(messageSchema, 'message');

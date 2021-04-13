@@ -216,7 +216,6 @@ describe('Deleting a dog', () => {
 			.delete('/api/v1/dogs/6')
 			.auth('staff', 'password');
 		expect(res.statusCode).toEqual(200);
-		expect(res.body).toHaveProperty('ID', '6');
 		expect(res.body.deleted).toBeTruthy();
 	});
 

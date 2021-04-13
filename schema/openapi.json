@@ -26,11 +26,19 @@
 		},
 		{
 			"name": "Authentication",
-			"description": "API endpoints for authentication."
+			"description": "API endpoints for authentication management."
 		},
 		{
 			"name": "Dogs",
 			"description": "API endpoints for dog management."
+		},
+		{
+			"name": "Chats",
+			"description": "API endpoints for chat management."
+		},
+		{
+			"name": "Messages",
+			"description": "API endpoints for message management."
 		}
 	],
 	"components": {
@@ -296,7 +304,7 @@
 				}
 			}
 		},
-		"/auth/logout/": {
+		"/auth/logout": {
 			"summary": "An authenticated user wanting to logout of the API.",
 			"description": "Users can logout of the API with their current sessions deleted from the database. This is done by removing the user's refresh token.",
 			"post": {
@@ -360,6 +368,8 @@
 			}
 		},
 		"/auth/google": {
+			"summary": "Authenticating with Google",
+			"description": "This resource represents  ",
 			"get": {
 				"tags": [
 					"Authentication"
@@ -447,7 +457,9 @@
 				}
 			}
 		},
-		"dogs/{name}{breed}": {
+		"/dogs{name}{breed}": {
+			"summary": "Represents filtered dogs",
+			"description": "This resource represents a list of dogs filtered by name and/or breed.",
 			"parameters": [
 				{
 					"in": "query",
@@ -496,7 +508,7 @@
 				}
 			}
 		},
-		"dogs/{ID}": {
+		"/dogs/{ID}": {
 			"parameters": [
 				{
 					"in": "path",
@@ -605,7 +617,7 @@
 				}
 			}
 		},
-		"dogs/fav": {
+		"/dogs/fav": {
 			"get": {
 				"tags": [
 					"Dogs"
@@ -631,7 +643,7 @@
 				}
 			}
 		},
-		"dogs/fav/{ID}": {
+		"/dogs/fav/{ID}": {
 			"parameters": [
 				{
 					"in": "path",
@@ -650,19 +662,19 @@
 				"responses": {
 					"201": {
 						"description": "The dog was added as favourite.",
-						"content":{
-							"application/json":{
-								"schema":{
+						"content": {
+							"application/json": {
+								"schema": {
 									"$ref": "#/components/schemas/createPassed"
 								}
 							}
 						}
 					},
-					"404":{
+					"404": {
 						"description": "The dog could not be added as favourite.",
-						"content":{
-							"application/json":{
-								"schema":{
+						"content": {
+							"application/json": {
+								"schema": {
 									"$ref": "#/components/schemas/createFailed"
 								}
 							}
@@ -676,21 +688,288 @@
 				],
 				"description": "Remove a favourite a dog as an authenticated user.",
 				"responses": {
-					"201": {
+					"200": {
 						"description": "The dog was deleted as favourite.",
-						"content":{
-							"application/json":{
-								"schema":{
+						"content": {
+							"application/json": {
+								"schema": {
 									"$ref": "#/components/schemas/deletePassed"
 								}
 							}
 						}
 					},
-					"404":{
+					"404": {
 						"description": "The dog could not be deleted as favourite.",
-						"content":{
-							"application/json":{
-								"schema":{
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/deleteFailed"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/chats": {
+			"summary": "Represents an individual chat",
+			"description": "This resource represents an individual chat in the system. Each chat is identified by a numeric `ID`.\n",
+			"get": {
+				"tags": [
+					"Chats"
+				],
+				"description": "Get all chats for an authenticated user.",
+				"responses": {
+					"200": {
+						"description": "Get a list of all chats for the authenticated user.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "./chat.schema.json#/definitions/chatList"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Only authenticated users can have chats."
+					},
+					"404": {
+						"description": "The authenticated user does not have chats."
+					}
+				}
+			}
+		},
+		"/chats/{locationID}": {
+			"parameters": [
+				{
+					"in": "path",
+					"name": "locationID",
+					"schema": {
+						"description": "ID of the shelter",
+						"type": "number",
+						"examples": [
+							2
+						]
+					},
+					"required": true
+				}
+			],
+			"get": {
+				"tags": [
+					"Chats"
+				],
+				"description": "Get all chats for a shelter location. Only accessible to admin and relevant staff.",
+				"responses": {
+					"200": {
+						"description": "A list of all chats for a shelter location.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "./chat.schema.json#/definitions/chatList"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Only authenticated staff and admin can view chats by shelter location."
+					},
+					"403": {
+						"description": "Only admin or staff assigned to a shelter can see chats for it."
+					},
+					"404": {
+						"description": "Not found."
+					}
+				}
+			},
+			"post": {
+				"tags": [
+					"Chats"
+				],
+				"description": "Start a new chat with a shelter.",
+				"responses": {
+					"201": {
+						"description": "A new chat was created between a user and shelter.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "./chat.schema.json#/definitions/chatCreated"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Only authentciated users can start a chat."
+					},
+					"404": {
+						"description": "Could not create chat."
+					}
+				}
+			}
+		},
+		"/chats/{ID}": {
+			"parameters": [
+				{
+					"in": "path",
+					"name": "ID",
+					"schema": {
+						"description": "ID of the chat",
+						"type": "number",
+						"examples": [
+							1
+						]
+					},
+					"required": true
+				}
+			],
+			"delete": {
+				"tags": [
+					"Chats"
+				],
+				"description": "Delete a chat using the ID.",
+				"responses": {
+					"200": {
+						"description": "The chat has been deleted.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/deletePassed"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "The chat could not be deleted.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/deleteFailed"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"/messages/{chatID}": {
+			"parameters": [
+				{
+					"in": "path",
+					"name": "chatID",
+					"schema": {
+						"description": "ID of the chat",
+						"type": "number",
+						"examples": [
+							1
+						]
+					},
+					"required": true
+				}
+			],
+			"get": {
+				"tags": [
+					"Messages"
+				],
+				"description": "Get all messages from a chat.",
+				"responses": {
+					"200": {
+						"description": "A list of all messages for a chat.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "./message.schema.json#/definitions/messageList"
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "Only users that started the chat, staff at the shelter or admins can view all messages."
+					},
+					"404": {
+						"description": "Not found."
+					}
+				}
+			},
+			"post": {
+				"tags": [
+					"Messages"
+				],
+				"description": "Create a message for an active chat.",
+				"requestBody": {
+					"description": "The request body with just the message.",
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "./message.schema.json#/definitions/message"
+							}
+						}
+					}
+				},
+				"responses": {
+					"201": {
+						"description": "The message was added to an active chat.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "./message.schema.json#/definitions/messageCreated"
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "Only authorised users can add a message to an active chat"
+					},
+					"404": {
+						"description": "Not found."
+					}
+				}
+			}
+		},
+		"/messages/{ID}": {
+			"parameters": [
+				{
+					"in": "path",
+					"name": "ID",
+					"schema": {
+						"description": "ID of the message",
+						"type": "number",
+						"examples": [
+							1
+						]
+					},
+					"required": true
+				}
+			],
+			"delete": {
+				"tags": [
+					"Messages"
+				],
+				"description": "Delete a message using the ID.",
+				"responses": {
+					"200": {
+						"description": "The message was deleted and deleted from it's chat.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/deletePassed"
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "Authenticated users can delete their own message. Any staff at a shelter or admin can delete a message from a chat.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/deleteFailed"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Message could not be deleted.",
+						"content": {
+							"application/json": {
+								"schema": {
 									"$ref": "#/components/schemas/deleteFailed"
 								}
 							}

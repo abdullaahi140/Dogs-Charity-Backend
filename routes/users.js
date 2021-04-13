@@ -61,7 +61,7 @@ async function getById(ctx) {
 /**
  *
  * @param {number} staffID - The staff's ID number
- * @param {number} staffCode - The staff code for a charity location
+ * @param {number} staffCode - The staff code for a shelter location
  * @returns {boolean} - Boolean on success of getting location and adding staff ID
  */
 // eslint-disable-next-line consistent-return

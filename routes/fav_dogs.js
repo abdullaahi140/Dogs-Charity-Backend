@@ -56,7 +56,6 @@ async function delFavDog(ctx) {
 	const { ID: dogID } = ctx.params;
 	const result = await dogFavModel.delFavDog(userID, dogID);
 	if (result === 1) {
-		ctx.status = 201;
 		ctx.body = { deleted: true };
 	} else {
 		ctx.status = 404;
@@ -64,7 +63,7 @@ async function delFavDog(ctx) {
 	}
 }
 
-const router = Router({ prefix: '/api/v1/dogs/fav' });
+const router = Router({ prefix: '/api/v1/dogs/favs' });
 
 router.get('/', auth, getFavDog);
 router.post('/:ID([0-9]{1,})', auth, addFavDog);

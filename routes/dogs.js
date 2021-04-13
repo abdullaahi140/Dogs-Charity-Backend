@@ -138,7 +138,7 @@ async function deleteDog(ctx) {
 	} else {
 		result = await dogsModel.delById(ID);
 		if (result) {
-			ctx.body = { ID, deleted: true };
+			ctx.body = { deleted: true };
 		}
 	}
 }
