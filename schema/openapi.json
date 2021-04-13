@@ -304,7 +304,7 @@
 				}
 			}
 		},
-		"/auth/logout/": {
+		"/auth/logout": {
 			"summary": "An authenticated user wanting to logout of the API.",
 			"description": "Users can logout of the API with their current sessions deleted from the database. This is done by removing the user's refresh token.",
 			"post": {
