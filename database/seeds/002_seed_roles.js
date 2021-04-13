@@ -19,6 +19,7 @@ exports.seed = function seed(knex) {
 			{ userID: 1, role: 'admin' },
 			{ userID: 2, role: 'staff' },
 			{ userID: 3, role: 'user' },
-			{ userID: 4, role: 'staff' }
+			{ userID: 4, role: 'staff' },
+			{ userID: 5, role: 'user' }
 		]));
 };
