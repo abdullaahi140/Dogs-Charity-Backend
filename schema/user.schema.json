@@ -207,7 +207,7 @@
 			"type": "object",
 			"properties": {
 				"ID": {
-					"description": "ID of the updated user record",
+					"description": "ID of the user record",
 					"type": "number",
 					"examples": [
 						1
