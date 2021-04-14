@@ -85,7 +85,7 @@ exports.update = async function update(ID, dog) {
 
 /**
  * Function that removes a user from the database.
- * @param {Object} ID - The ID of the dog
+ * @param {number} ID - The ID of the dog
  * @returns {number} - The number of rows deleted by the database
  * @throws {KnexError} - Re-raise and sanitise DB errors
  */

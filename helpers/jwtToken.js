@@ -17,7 +17,7 @@ const payload = {
 
 /**
  * Function to generate an access token for the authenticated user.
- * @param {Object} ID - The ID of the user
+ * @param {number} ID - The ID of the user
  * @param {Object} username - The username of the user
  * @param {string} provider - The provider of the account e.g. 'google', 'internal'
  * @returns {Object} - A signed JWT access token
@@ -32,7 +32,7 @@ exports.genJwtAccessToken = async function genJwtAccessToken(ID, username, provi
 
 /**
  * Function to generate a refresh token for the authenticated user.
- * @param {Object} ID - The ID of the user
+ * @param {number} ID - The ID of the user
  * @param {Object} username - The username of the user
  * @param {string} provider - The provider of the account e.g. 'google', 'internal'
  * @returns {Object} - A signed JWT refresh token
