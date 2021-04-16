@@ -28,15 +28,18 @@
     "@koa/cors": "^3.1.0",
     "bcrypt": "^5.0.1",
     "dotenv": "^8.2.0",
+    "fs": "*",
     "jsonschema": "^1.4.0",
     "jsonwebtoken": "^8.5.1",
     "knex": "^0.95.2",
     "koa": "^2.13.1",
+    "koa-body": "^4.2.0",
     "koa-bodyparser": "^4.3.0",
     "koa-mount": "^4.0.0",
     "koa-passport": "^4.1.4",
     "koa-router": "^10.0.0",
     "koa-static": "^5.0.0",
+    "mime-types": "^2.1.30",
     "mysql2": "^2.2.5",
     "passport-google-oauth20": "^2.0.0",
     "passport-http": "^0.3.0",
@@ -54,6 +57,7 @@
     "jest": "^26.6.3",
     "jsdoc": "^3.6.6",
     "minami": "^1.2.3",
+    "mock-fs": "^4.13.0",
     "supertest": "^6.1.3"
   }
 }
