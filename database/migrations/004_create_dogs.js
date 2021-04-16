@@ -18,8 +18,10 @@ exports.up = function up(knex) {
 		table.integer('age');
 		table.string('breed');
 		table.string('description');
+		table.integer('imageID').unsigned();
 		table.timestamp('dateAdded').defaultTo(knex.fn.now());
 		table.timestamp('dateModified').defaultTo(knex.raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
+		table.foreign('imageID').references('images.ID');
 	});
 };
 
