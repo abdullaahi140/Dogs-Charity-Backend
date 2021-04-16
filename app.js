@@ -11,6 +11,7 @@ const dogs = require('./routes/dogs.js');
 const favDogs = require('./routes/fav_dogs.js');
 const chats = require('./routes/chats.js');
 const messages = require('./routes/messages.js');
+const images = require('./routes/images.js');
 
 app.use(authenticate.routes());
 app.use(users.routes());
@@ -18,5 +19,6 @@ app.use(dogs.routes());
 app.use(favDogs.routes());
 app.use(chats.routes());
 app.use(messages.routes());
+app.use(images.routes());
 
 module.exports = app;
