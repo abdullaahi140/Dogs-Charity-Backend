@@ -5,12 +5,20 @@
  * @see routes/* for other routes in the API
  */
 
+const uploadOptions = {
+	multipart: true,
+	formidable: {
+		uploadDir: 'tmp/api/uploads'
+	}
+};
+
 const Router = require('koa-router');
-const bodyParser = require('koa-bodyparser');
+const koaBody = require('koa-body')(uploadOptions);
 
 const dogsModel = require('../models/dogs.js');
 const dogLocationsModel = require('../models/dog_locations.js');
 
+const imageUpload = require('../controllers/image_upload.js');
 const { valDog, valDogUpdate } = require('../controllers/validation.js');
 const { auth } = require('../controllers/auth.js');
 const can = require('../permissions/dogs.js');
@@ -55,7 +63,7 @@ async function getDogs(ctx) {
  * Route that gets adds a dog to the API.
  * @param {Object} ctx - The Koa request/response context object
  */
-async function createDog(ctx) {
+async function createDog(ctx, next) {
 	const permission = await can.create(ctx.state.user);
 	if (!permission.granted) {
 		ctx.status = 403;
@@ -65,6 +73,7 @@ async function createDog(ctx) {
 		let ID;
 
 		if (locationID) {
+			ctx.request.body.age = parseInt(ctx.request.body.age, 10);
 			result = await dogsModel.add(ctx.request.body);
 			if (result.length) {
 				[ID] = result; // setting ID to first element in result
@@ -74,13 +83,14 @@ async function createDog(ctx) {
 		}
 
 		if (result.length) {
-			const link = `${ctx.protocol}://${ctx.request.header.host}${ctx.originalUrl}${ID}`;
+			const link = `${ctx.protocol}://${ctx.request.header.host}${ctx.originalUrl}/${ID}`;
 			ctx.body = {
 				ID,
 				created: true,
-				link
+				links: { dog: link }
 			};
 			ctx.status = 201;
+			await next();
 		}
 	}
 }
@@ -147,9 +157,9 @@ async function deleteDog(ctx) {
 const router = Router({ prefix: '/api/v1/dogs' });
 
 router.get('/', getDogs);
-router.post('/', auth, bodyParser(), valDog, createDog);
+router.post('/', auth, koaBody, valDog, createDog, imageUpload);
 router.get('/:ID([0-9]{1,})', getById);
-router.put('/:ID([0-9]{1,})', auth, bodyParser(), valDogUpdate, updateDog);
+router.put('/:ID([0-9]{1,})', auth, koaBody, valDogUpdate, updateDog, imageUpload);
 router.del('/:ID([0-9]{1,})', auth, deleteDog);
 
 module.exports = router;

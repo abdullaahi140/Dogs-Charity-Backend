@@ -5,8 +5,15 @@
  * @see routes/* for other routes in the API
  */
 
+const uploadOptions = {
+	multipart: true,
+	formidable: {
+		uploadDir: 'tmp/api/uploads'
+	}
+};
+
 const Router = require('koa-router');
-const bodyParser = require('koa-bodyparser');
+const koaBody = require('koa-body')(uploadOptions);
 
 const userModel = require('../models/users.js');
 const roleModel = require('../models/roles.js');
@@ -18,6 +25,7 @@ const hashPassword = require('../helpers/hashPassword.js');
 const jwt = require('../helpers/jwtToken.js');
 const { auth } = require('../controllers/auth.js');
 
+const imageUpload = require('../controllers/image_upload.js');
 const { valUser, valUserUpdate } = require('../controllers/validation.js');
 const can = require('../permissions/users.js');
 require('dotenv').config();
@@ -66,34 +74,34 @@ async function getById(ctx) {
  */
 // eslint-disable-next-line consistent-return
 async function checkStaffRole(staffID, staffCode) {
-	try {
-		let result = await locationsModel.getByStaffId(staffCode);
-		if (result.length) {
-			const locationID = result[0].ID;
-			result = await staffLocationsModel.add(staffID, locationID);
-			return true;
-		}
-	} catch (error) {
-		return false;
+	let result = await locationsModel.getByStaffId(staffCode);
+	if (result.length) {
+		const locationID = result[0].ID;
+		result = await staffLocationsModel.add(staffID, locationID);
+		return true;
 	}
+	return false;
 }
 
 /**
  * Route that gets all users from the database
  * @param {Object} ctx - The Koa request/response context object
  */
-async function createUser(ctx) {
+async function createUser(ctx, next) {
 	const { staffCode, ...body } = await hashPassword(ctx.request.body);
 	// checking for staff code
 	// const role = (staffCode === process.env.STAFF_CODE) ? 'staff' : 'user';
 
 	let ID;
+	let role = 'user';
 	try {
 		let result = await userModel.add(body);
 		if (result.length) {
 			[ID] = result; // setting ID to first element in result
 			// check for staff role using staffCode to find chairty location
-			const role = (await checkStaffRole(ID, staffCode)) ? 'staff' : 'user';
+			if (staffCode && await checkStaffRole(ID, staffCode)) {
+				role = 'staff';
+			}
 			const userWithRole = { role, userID: ID };
 			result = await roleModel.add(userWithRole);
 		}
@@ -110,9 +118,10 @@ async function createUser(ctx) {
 				ID,
 				created: true,
 				accessToken,
-				link
+				links: { account: link }
 			};
 			ctx.status = 201;
+			await next();
 		}
 	} catch (error) {
 		ctx.body = { created: false };
@@ -176,8 +185,8 @@ const router = Router({ prefix: '/api/v1/users' });
 
 router.get('/', auth, getAll);
 router.get('/:ID([0-9]{1,})', auth, getById);
-router.post('/', bodyParser(), valUser, createUser);
-router.put('/:ID([0-9]{1,})', auth, bodyParser(), valUserUpdate, updateUser);
-router.del('/:ID([0-9]{1,})', auth, bodyParser(), deleteUser);
+router.post('/', koaBody, valUser, createUser, imageUpload);
+router.put('/:ID([0-9]{1,})', auth, koaBody, valUserUpdate, updateUser);
+router.del('/:ID([0-9]{1,})', auth, koaBody, deleteUser);
 
 module.exports = router;
