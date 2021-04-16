@@ -54,7 +54,7 @@ exports.add = async function add(userID, locationID) {
 
 /**
  * Function that removes a chat from the database.
- * @param {Object} ID - The chat ID
+ * @param {number} ID - The chat ID
  * @returns {number} - The number of rows deleted by the database
  * @throws {KnexError} - Re-raise and sanitise DB errors
  */

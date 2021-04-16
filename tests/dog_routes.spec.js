@@ -1,4 +1,5 @@
 const request = require('supertest');
+const mock = require('mock-fs');
 const app = require('../app.js');
 
 /* eslint-disable no-console */
@@ -6,11 +7,21 @@ const app = require('../app.js');
 beforeAll(async () => {
 	jest.spyOn(console, 'error');
 	console.error.mockImplementation(() => null);
+	// mock the file system to prevent image uploads from being saved
+	mock({
+		'./var/tmp/api/public/images': mock.directory(),
+		'./tmp/api/uploads': mock.directory(),
+		'./images': {
+			'dog.jpg': mock.load('./tests/images/dog.jpg')
+		},
+		node_modules: mock.load('node_modules')
+	});
 });
 
 // Return console error to original state
 afterAll(async () => {
 	console.error.mockRestore();
+	mock.restore();
 });
 
 describe('Getting dogs', () => {
@@ -84,12 +95,11 @@ describe('Add a new dog', () => {
 	test('Unauthenticated user cannot add a dog', async () => {
 		const res = await request(app.callback())
 			.post('/api/v1/dogs')
-			.send({
-				name: 'Stacy',
-				age: 3,
-				breed: 'Bulldog',
-				description: 'A crazy bulldog.'
-			});
+			.field('name', 'Stacy')
+			.field('age', '3')
+			.field('breed', 'Bulldog')
+			.field('description', 'A crazy bulldog.')
+			.attach('upload', './images/dog.jpg');
 		expect(res.statusCode).toEqual(401);
 	});
 
@@ -97,12 +107,11 @@ describe('Add a new dog', () => {
 		const res = await request(app.callback())
 			.post('/api/v1/dogs')
 			.auth('user', 'password')
-			.send({
-				name: 'Stacy',
-				age: 3,
-				breed: 'Bulldog',
-				description: 'A crazy bulldog.'
-			});
+			.field('name', 'Stacy')
+			.field('age', '3')
+			.field('breed', 'Bulldog')
+			.field('description', 'A crazy bulldog.')
+			.attach('upload', './images/dog.jpg');
 		expect(res.statusCode).toEqual(403);
 	});
 
@@ -110,16 +119,15 @@ describe('Add a new dog', () => {
 		const res = await request(app.callback())
 			.post('/api/v1/dogs')
 			.auth('staff', 'password')
-			.send({
-				name: 'Stacy',
-				age: 3,
-				breed: 'Bulldog',
-				description: 'A crazy bulldog.'
-			});
+			.field('name', 'Stacy')
+			.field('age', '3')
+			.field('breed', 'Bulldog')
+			.field('description', 'A crazy bulldog.')
+			.attach('upload', './images/dog.jpg');
 		expect(res.statusCode).toEqual(201);
 		expect(res.body).toHaveProperty('ID', 6);
 		expect(res.body.created).toBeTruthy();
-		expect(res.body).toHaveProperty('link');
+		expect(res.body).toHaveProperty('links');
 	});
 });
 
@@ -147,7 +155,7 @@ describe('Update a dog record', () => {
 			.auth('anotherStaff', 'password')
 			.send({
 				name: 'Annie',
-				age: 1,
+				age: '1',
 				breed: 'Pomeranian',
 				description: 'A small pupper'
 			});
@@ -167,7 +175,7 @@ describe('Update a dog record', () => {
 			.auth('staff', 'password')
 			.send({
 				name: 'Annie',
-				age: 1,
+				age: '1',
 				breed: 'Pomeranian',
 				description: 'A small pupper'
 			});

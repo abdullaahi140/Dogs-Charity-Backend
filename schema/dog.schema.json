@@ -16,9 +16,9 @@
 				},
 				"age": {
 					"description": "The age of the dog",
-					"type": "number",
+					"type": "string",
 					"examples": [
-						1
+						"1"
 					]
 				},
 				"breed": {
@@ -36,10 +36,19 @@
 					"examples": [
 						"A beautiful rottweiler."
 					]
+				},
+				"imageID": {
+					"description": "ID of the avatar image for user",
+					"type": "number",
+					"examples": [
+						1
+					]
 				}
 			},
 			"required": [
-				"name"
+				"name",
+				"age",
+				"description"
 			],
 			"additionalProperties": false
 		},
@@ -65,9 +74,9 @@
 				},
 				"age": {
 					"description": "The age of the dog",
-					"type": "number",
+					"type": "string",
 					"examples": [
-						1
+						"1"
 					]
 				},
 				"breed": {
@@ -126,9 +135,9 @@
 				},
 				"age": {
 					"description": "The age of the dog",
-					"type": "number",
+					"type": "string",
 					"examples": [
-						1
+						"1"
 					]
 				},
 				"breed": {

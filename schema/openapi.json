@@ -39,6 +39,10 @@
 		{
 			"name": "Messages",
 			"description": "API endpoints for message management."
+		},
+		{
+			"name": "Images",
+			"description": "API endpoints for image management."
 		}
 	],
 	"components": {
@@ -137,7 +141,7 @@
 						}
 					},
 					"404": {
-						"description": "Account was not created",
+						"description": "Account was not created.",
 						"content": {
 							"application/json": {
 								"schema": {
@@ -617,7 +621,7 @@
 				}
 			}
 		},
-		"/dogs/fav": {
+		"/dogs/favs": {
 			"get": {
 				"tags": [
 					"Dogs"
@@ -643,7 +647,7 @@
 				}
 			}
 		},
-		"/dogs/fav/{ID}": {
+		"/dogs/favs/{ID}": {
 			"parameters": [
 				{
 					"in": "path",
@@ -946,7 +950,7 @@
 				"description": "Delete a message using the ID.",
 				"responses": {
 					"200": {
-						"description": "The message was deleted and deleted from it's chat.",
+						"description": "The message was deleted.",
 						"content": {
 							"application/json": {
 								"schema": {
@@ -956,7 +960,7 @@
 						}
 					},
 					"403": {
-						"description": "Authenticated users can delete their own message. Any staff at a shelter or admin can delete a message from a chat.",
+						"description": "Only authorised users can delete messages.",
 						"content": {
 							"application/json": {
 								"schema": {
@@ -974,6 +978,36 @@
 								}
 							}
 						}
+					}
+				}
+			}
+		},
+		"/images/{ID}": {
+			"parameters": [
+				{
+					"in": "path",
+					"name": "ID",
+					"schema": {
+						"description": "ID of the image",
+						"type": "number",
+						"examples": [
+							1
+						]
+					},
+					"required": true
+				}
+			],
+			"get":{
+				"tags":[
+					"Images"
+				],
+				"description": "Get an image using the ID number",
+				"responses":{
+					"200":{
+						"description": "The image was successfully retrieved from the database."
+					},
+					"404": {
+						"description": "Not found."
 					}
 				}
 			}

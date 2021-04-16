@@ -16,35 +16,40 @@ exports.seed = async function seed(knex) {
 		name: 'George',
 		age: 5,
 		breed: 'Rottweiler',
-		description: 'A beautiful rottweiler'
+		description: 'A beautiful rottweiler',
+		imageID: 6
 	};
 
 	const dog2 = {
 		name: 'Jack',
 		age: 1,
 		breed: 'Shiba',
-		description: 'A very young shiba'
+		description: 'A very young shiba',
+		imageID: 7
 	};
 
 	const dog3 = {
 		name: 'Sophie',
 		age: 3,
 		breed: 'Poodle',
-		description: 'A wild poodle'
+		description: 'A wild poodle',
+		imageID: 8
 	};
 
 	const dog4 = {
 		name: 'Phoebe',
 		age: 7,
 		breed: 'Labradoodle',
-		description: 'A small labradoodle'
+		description: 'A small labradoodle',
+		imageID: 9
 	};
 
 	const dog5 = {
 		name: 'Phoebe',
 		age: 2,
 		breed: 'Kelpie',
-		description: 'A bouncing kelpie'
+		description: 'A bouncing kelpie',
+		imageID: 10
 	};
 
 	// Deletes ALL existing entries

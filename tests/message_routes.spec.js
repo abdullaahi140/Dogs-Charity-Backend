@@ -86,7 +86,6 @@ describe('Creating messages', () => {
 });
 
 describe('Deleting messages', () => {
-	// TODO: Keep going
 	test('User can delete message', async () => {
 		const res = await request(app.callback())
 			.del('/api/v1/messages/1')

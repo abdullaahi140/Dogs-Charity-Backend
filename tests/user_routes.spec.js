@@ -1,4 +1,5 @@
 const request = require('supertest');
+const mock = require('mock-fs');
 const app = require('../app.js');
 
 /* eslint-disable no-console */
@@ -6,11 +7,21 @@ const app = require('../app.js');
 beforeAll(async () => {
 	jest.spyOn(console, 'error');
 	console.error.mockImplementation(() => null);
+	// mock the file system to prevent image uploads from being saved
+	mock({
+		'./var/tmp/api/public/images': mock.directory(),
+		'./tmp/api/uploads': mock.directory(),
+		'./images': {
+			'avatar.png': mock.load('./tests/images/avatar.png')
+		},
+		node_modules: mock.load('node_modules')
+	});
 });
 
 // Return console error to original state
 afterAll(async () => {
 	console.error.mockRestore();
+	mock.restore();
 });
 
 describe('Getting users', () => {
@@ -65,14 +76,14 @@ describe('Get a single user', () => {
 	});
 });
 
-describe('Create a new user', () => {
+describe('Create a new user with incorrect staff code', () => {
 	test('should create a new user', async () => {
 		const res = await request(app.callback())
 			.post('/api/v1/users')
-			.send({
-				username: 'example',
-				password: 'password'
-			});
+			.field('username', 'example')
+			.field('password', 'password')
+			.field('staffCode', 'totallyNotStaff')
+			.attach('upload', './images/avatar.png');
 		expect(res.statusCode).toEqual(201);
 		expect(res.body.created).toBeTruthy();
 		expect(res.body).toHaveProperty('accessToken');

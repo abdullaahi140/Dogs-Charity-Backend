@@ -40,7 +40,7 @@ exports.add = async function add(message) {
 
 /**
  * Function that removes a message from the database.
- * @param {Object} ID - The message ID
+ * @param {number} ID - The message ID
  * @returns {number} - The number of rows deleted by the database
  * @throws {KnexError} - Re-raise and sanitise DB errors
  */
