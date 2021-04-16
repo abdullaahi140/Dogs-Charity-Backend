@@ -14,8 +14,8 @@ const usersModel = require('../models/users.js');
 const dogsModel = require('../models/dogs.js');
 
 // creating upload directory if it doesn't exist
-if (!existsSync('../tmp/api/uploads')) {
-	mkdirSync('../tmp/api/uploads', { recursive: true });
+if (!existsSync('./tmp/api/uploads')) {
+	mkdirSync('./tmp/api/uploads', { recursive: true });
 }
 
 /**
