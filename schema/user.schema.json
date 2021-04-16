@@ -36,6 +36,13 @@
 						"password123"
 					]
 				},
+				"imageID": {
+					"description": "ID of the avatar image for user",
+					"type": "number",
+					"examples": [
+						1
+					]
+				},
 				"imgURL": {
 					"description": "URL of avatar image",
 					"type": "string",
