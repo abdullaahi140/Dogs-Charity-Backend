@@ -19,7 +19,7 @@ exports.seed = async function seed(knex) {
 		password: 'admin',
 		firstName: 'Admin',
 		lastName: 'User',
-		imgURL: 'https://visualpharm.com/assets/314/Admin-595b40b65ba036ed117d36fe.svg'
+		imageID: 1
 	});
 
 	const staff = await hashPassword({
@@ -27,7 +27,7 @@ exports.seed = async function seed(knex) {
 		password: 'password',
 		firstName: 'Staff',
 		lastName: 'User',
-		imgURL: 'https://icon-library.com/images/staff-icon/staff-icon-5.jpg'
+		imageID: 2
 	});
 
 	const user = await hashPassword({
@@ -35,7 +35,7 @@ exports.seed = async function seed(knex) {
 		password: 'password',
 		firstName: 'Example',
 		lastName: 'User',
-		imgURL: 'https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png'
+		imageID: 3
 	});
 
 	const staff2 = await hashPassword({
@@ -43,7 +43,7 @@ exports.seed = async function seed(knex) {
 		password: 'password',
 		firstName: 'Staff',
 		lastName: 'User',
-		imgURL: 'https://icon-library.com/images/staff-icon/staff-icon-5.jpg'
+		imageID: 4
 	});
 
 	const user2 = await hashPassword({
@@ -51,7 +51,7 @@ exports.seed = async function seed(knex) {
 		password: 'password',
 		firstName: 'User',
 		lastName: 'User',
-		imgURL: 'https://icon-library.com/images/staff-icon/staff-icon-5.jpg'
+		imageID: 5
 	});
 
 	// Deletes ALL existing entries
