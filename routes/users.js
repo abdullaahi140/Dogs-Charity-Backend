@@ -74,7 +74,7 @@ async function getById(ctx) {
  */
 // eslint-disable-next-line consistent-return
 async function checkStaffRole(staffID, staffCode) {
-	let result = await locationsModel.getByStaffId(staffCode);
+	let result = await locationsModel.getByStaffCode(staffCode);
 	if (result.length) {
 		const locationID = result[0].ID;
 		result = await staffLocationsModel.add(staffID, locationID);
@@ -88,12 +88,10 @@ async function checkStaffRole(staffID, staffCode) {
  * @param {Object} ctx - The Koa request/response context object
  */
 async function createUser(ctx, next) {
-	const { staffCode, ...body } = await hashPassword(ctx.request.body);
-	// checking for staff code
-	// const role = (staffCode === process.env.STAFF_CODE) ? 'staff' : 'user';
-
 	let ID;
 	let role = 'user';
+	const { staffCode, ...body } = await hashPassword(ctx.request.body);
+
 	try {
 		let result = await userModel.add(body);
 		if (result.length) {
@@ -107,8 +105,8 @@ async function createUser(ctx, next) {
 		}
 
 		const accessToken = await jwt.genJwtAccessToken(ID, body.username);
+		const userRefresh = await jwt.genJwtRefreshToken(ID, body.username);
 		if (result.length) {
-			const userRefresh = await jwt.genJwtRefreshToken(ID, body.username);
 			result = await refreshModel.add(userRefresh);
 		}
 
@@ -124,6 +122,7 @@ async function createUser(ctx, next) {
 			await next();
 		}
 	} catch (error) {
+		console.error(error);
 		ctx.body = { created: false };
 		ctx.status = 404;
 	}

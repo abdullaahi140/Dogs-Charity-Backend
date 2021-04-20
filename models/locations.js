@@ -13,7 +13,7 @@ const { knex, KnexError } = require('../database/knex.js');
  * @returns {Array} - Array with ID's of users added
  * @throws {KnexError} - Re-raise and sanitise DB errors
  */
-exports.getByStaffId = async function getByStaffId(staffCode) {
+exports.getByStaffCode = async function getByStaffCode(staffCode) {
 	return knex.from('locations').select('ID').where({ staffCode })
 		.catch((error) => KnexError(error));
 };

@@ -14,8 +14,8 @@ const usersModel = require('../models/users.js');
 const dogsModel = require('../models/dogs.js');
 
 // creating upload directory if it doesn't exist
-if (!existsSync('../tmp/api/uploads')) {
-	mkdirSync('../tmp/api/uploads', { recursive: true });
+if (!existsSync('./tmp/api/uploads')) {
+	mkdirSync('./tmp/api/uploads', { recursive: true });
 }
 
 /**
@@ -26,29 +26,27 @@ if (!existsSync('../tmp/api/uploads')) {
  */
 async function imageUpload(ctx) {
 	// check if there's a file to upload
-	if (!ctx.request.files) {
-		return;
-	}
+	if (ctx.request.files && ctx.request.files.upload) {
+		// persistent location to save images
+		const fileStore = 'var/tmp/api/public/images';
+		const { path, type } = ctx.request.files.upload;
+		const extension = mime.extension(type);
+		const filename = `${uuidv4()}.${extension}`;
+		const newPath = `${fileStore}/${filename}`;
+		copyFileSync(path, newPath);
 
-	// persistent location to save images
-	const fileStore = 'var/tmp/api/public/images';
-	const { path, type } = ctx.request.files.upload;
-	const extension = mime.extension(type);
-	const filename = `${uuidv4()}.${extension}`;
-	const newPath = `${fileStore}/${filename}`;
-	copyFileSync(path, newPath);
-
-	const image = { filename, type };
-	const result = await imagesModel.add(image);
-	if (result.length) {
-		const imageID = { imageID: result[0] };
-		if (ctx.originalUrl.includes('users')) {
-			await usersModel.update(ctx.body.ID, imageID);
-		} else {
-			await dogsModel.update(ctx.body.ID, imageID);
+		const image = { filename, type };
+		const result = await imagesModel.add(image);
+		if (result.length) {
+			const imageID = { imageID: result[0] };
+			if (ctx.originalUrl.includes('users')) {
+				await usersModel.update(ctx.body.ID, imageID);
+			} else {
+				await dogsModel.update(ctx.body.ID, imageID);
+			}
+			const links = `${ctx.protocol}://${ctx.request.header.host}/api/v1/images/${result[0]}`;
+			ctx.body.links.image = links;
 		}
-		const links = `${ctx.protocol}://${ctx.request.header.host}/api/v1/images/${result[0]}`;
-		ctx.body.links.image = links;
 	}
 }
 

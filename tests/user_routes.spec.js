@@ -107,14 +107,17 @@ describe('Create a new user with incorrect staff code', () => {
 				password: 'staffPassword',
 				staffCode: 'xJZUFO82@ivDBMWX'
 			});
-		const checkRole = await request(app.callback())
-			.get('/api/v1/users/7')
-			.auth('exampleStaff', 'staffPassword');
-		expect(res.statusCode).toEqual(201);
+		expect(res.statusCode).toEqual(201); // FIXME: Received: 404
 		expect(res.body.created).toBeTruthy();
 		expect(res.body).toHaveProperty('accessToken');
-		expect(checkRole.statusCode).toEqual(200);
-		expect(checkRole.body).toHaveProperty('role', 'staff');
+	});
+
+	test('new staff should have staff role', async () => {
+		const res = await request(app.callback())
+			.get('/api/v1/users/7')
+			.auth('exampleStaff', 'staffPassword');
+		expect(res.statusCode).toEqual(200);
+		expect(res.body).toHaveProperty('role', 'staff');
 	});
 
 	test('should not be able to create duplicate accounts', async () => {

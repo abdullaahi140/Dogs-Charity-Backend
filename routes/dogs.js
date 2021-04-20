@@ -18,9 +18,10 @@ const koaBody = require('koa-body')(uploadOptions);
 const dogsModel = require('../models/dogs.js');
 const dogLocationsModel = require('../models/dog_locations.js');
 
-const imageUpload = require('../controllers/image_upload.js');
-const { valDog, valDogUpdate } = require('../controllers/validation.js');
 const { auth } = require('../controllers/auth.js');
+const { valDog, valDogUpdate } = require('../controllers/validation.js');
+const imageUpload = require('../controllers/image_upload.js');
+const tweetDog = require('../controllers/tweet_dog.js');
 const can = require('../permissions/dogs.js');
 
 /**
@@ -157,7 +158,7 @@ async function deleteDog(ctx) {
 const router = Router({ prefix: '/api/v1/dogs' });
 
 router.get('/', getDogs);
-router.post('/', auth, koaBody, valDog, createDog, imageUpload);
+router.post('/', auth, koaBody, valDog, createDog, tweetDog, imageUpload);
 router.get('/:ID([0-9]{1,})', getById);
 router.put('/:ID([0-9]{1,})', auth, koaBody, valDogUpdate, updateDog, imageUpload);
 router.del('/:ID([0-9]{1,})', auth, deleteDog);
