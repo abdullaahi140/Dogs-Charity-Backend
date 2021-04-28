@@ -3,7 +3,10 @@ const cors = require('@koa/cors');
 require('dotenv').config();
 
 const app = new Koa();
-app.use(cors());
+app.use(cors({
+	origin: 'https://list-denver-3000.codio-box.uk/',
+	allowMethods: ['GET', 'POST', 'PUT', 'DELETE']
+}));
 
 const authenticate = require('./routes/authenticate.js');
 const users = require('./routes/users.js');
