@@ -16,6 +16,7 @@ exports.up = function up(knex) {
 		table.increments('ID').unique();
 		table.string('name').notNullable();
 		table.integer('age');
+		table.string('gender');
 		table.string('breed');
 		table.string('description');
 		table.integer('imageID').unsigned();

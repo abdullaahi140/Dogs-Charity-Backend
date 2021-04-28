@@ -15,6 +15,7 @@ exports.seed = async function seed(knex) {
 	const dog1 = {
 		name: 'George',
 		age: 5,
+		gender: 'Male',
 		breed: 'Rottweiler',
 		description: 'A beautiful rottweiler',
 		imageID: 6
@@ -23,6 +24,7 @@ exports.seed = async function seed(knex) {
 	const dog2 = {
 		name: 'Jack',
 		age: 1,
+		gender: 'Male',
 		breed: 'Shiba',
 		description: 'A very young shiba',
 		imageID: 7
@@ -31,6 +33,7 @@ exports.seed = async function seed(knex) {
 	const dog3 = {
 		name: 'Sophie',
 		age: 3,
+		gender: 'Female',
 		breed: 'Poodle',
 		description: 'A wild poodle',
 		imageID: 8
@@ -39,6 +42,7 @@ exports.seed = async function seed(knex) {
 	const dog4 = {
 		name: 'Phoebe',
 		age: 7,
+		gender: 'Female',
 		breed: 'Labradoodle',
 		description: 'A small labradoodle',
 		imageID: 9
@@ -47,6 +51,7 @@ exports.seed = async function seed(knex) {
 	const dog5 = {
 		name: 'Phoebe',
 		age: 2,
+		gender: 'Female',
 		breed: 'Kelpie',
 		description: 'A bouncing kelpie',
 		imageID: 10
