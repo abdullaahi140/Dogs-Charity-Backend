@@ -6,15 +6,11 @@
  */
 
 const Router = require('koa-router');
-const bodyParser = require('koa-bodyparser');
 
 const { auth, googleAuth } = require('../controllers/auth.js');
 
 const model = require('../models/refresh.js');
 const jwt = require('../helpers/jwtToken.js');
-
-// Adding URI prefix
-const router = new Router({ prefix: '/api/v1/auth' });
 
 /**
  * Function that generates JWTs after successful authentication
@@ -26,14 +22,22 @@ async function genTokens(ctx, provider = 'internal') {
 	const accessToken = await jwt.genJwtAccessToken(ID, username, provider);
 
 	let result = await model.getById(ID);
-	if (!result.length) {
-		const userRefresh = await jwt.genJwtRefreshToken(ID, username, provider);
+	let userRefresh;
+	if (result.length) {
+		const { userID, refresh_token: token } = result[0];
+		userRefresh = { userID, token };
+	} else {
+		userRefresh = await jwt.genJwtRefreshToken(ID, username, provider);
 		result = await model.add(userRefresh);
 	}
 
 	if (accessToken && result.length) {
 		ctx.status = 201;
-		ctx.body = { accessToken };
+		ctx.body = {
+			user: ctx.state.user,
+			accessToken,
+			refreshToken: userRefresh
+		};
 	}
 }
 
@@ -84,9 +88,12 @@ async function googleCallback(ctx) {
 	await genTokens(ctx, 'google');
 }
 
+// Adding URI prefix
+const router = new Router({ prefix: '/api/v1/auth' });
+
 // Authentication for internal accounts
-router.post('/login', bodyParser(), auth, login);
-router.post('/logout/', auth, logout);
+router.post('/login', auth, login);
+router.post('/logout', auth, logout);
 router.get('/refresh/:ID([0-9]{1,})', refresh);
 
 // Authentication for Google accounts

@@ -16,6 +16,24 @@ const can = require('../permissions/chats.js');
  * Route that gets all chats of the authenticated user
  * @param {Object} ctx - The Koa request/response context object
  */
+async function getById(ctx) {
+	const { chatID } = ctx.params;
+	const result = await model.getById(chatID);
+	if (result.length) {
+		const [chat] = result;
+		const permission = await can.readChat(ctx.state.user, chat);
+		if (!permission.granted) {
+			ctx.status = 403;
+		} else {
+			ctx.body = chat;
+		}
+	}
+}
+
+/**
+ * Route that gets all chats of the authenticated user
+ * @param {Object} ctx - The Koa request/response context object
+ */
 async function getAll(ctx) {
 	const { ID } = ctx.state.user;
 	const result = await model.getAll(ID);
@@ -91,7 +109,8 @@ async function delChat(ctx) {
 const router = Router({ prefix: '/api/v1/chats' });
 
 router.get('/', auth, getAll);
-router.get('/:locationID([0-9]{1,})', auth, getAllByLocationId);
+router.get('/:chatID([0-9]{1,})', auth, getById);
+router.get('/location/:locationID([0-9]{1,})', auth, getAllByLocationId);
 router.post('/:locationID([0-9]{1,})', auth, createChat);
 router.del('/:ID([0-9]{1,})', auth, delChat);
 

@@ -116,14 +116,17 @@ async function createUser(ctx, next) {
 				ID,
 				created: true,
 				accessToken,
+				refreshToken: userRefresh,
 				links: { account: link }
 			};
 			ctx.status = 201;
 			await next();
 		}
-	} catch (error) {
-		console.error(error);
+	} catch (err) {
 		ctx.body = { created: false };
+		if (err.code === 'ER_DUP_ENTRY') {
+			ctx.body.message = 'Username is already taken';
+		}
 		ctx.status = 404;
 	}
 }
@@ -153,7 +156,7 @@ async function updateUser(ctx) {
 			ctx.body = {
 				ID,
 				updated: true,
-				link
+				links: link
 			};
 			ctx.status = 201;
 		}

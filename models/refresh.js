@@ -25,7 +25,9 @@ exports.getById = async function getById(userID) {
  * @throws {KnexError} - Re-raise and sanitise DB errors
  */
 exports.add = async function add(user) {
-	return knex.from('refresh').insert(user)
+	// eslint-disable-next-line camelcase
+	const { userID, token: refresh_token } = user;
+	return knex.from('refresh').insert({ userID, refresh_token })
 		.catch((error) => KnexError(error));
 };
 

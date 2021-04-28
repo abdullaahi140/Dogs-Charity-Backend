@@ -9,7 +9,6 @@ const Router = require('koa-router');
 const { createReadStream, existsSync } = require('fs');
 
 const model = require('../models/images');
-const { auth } = require('../controllers/auth.js');
 
 /**
  * Route that gets images using ID from the database

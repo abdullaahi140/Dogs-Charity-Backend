@@ -14,7 +14,9 @@ const { knex, KnexError } = require('../database/knex.js');
  * @throws {KnexError} - Re-raise and sanitise DB errors
  */
 exports.getAllByLocationId = async function getById(locationID) {
-	return knex.from('chats').select('*').where({ locationID })
+	return knex.from('chats').select('chats.*', 'locations.name as locationName')
+		.where({ locationID })
+		.leftJoin('locations', 'chats.locationID', 'locations.ID')
 		.catch((error) => KnexError(error));
 };
 
@@ -25,7 +27,9 @@ exports.getAllByLocationId = async function getById(locationID) {
  * @throws {KnexError} - Re-raise and sanitise DB errors
  */
 exports.getById = async function getById(ID) {
-	return knex.from('chats').select('*').where({ ID })
+	return knex.from('chats').select('chats.*', 'locations.name as locationName')
+		.where('chats.ID', ID)
+		.leftJoin('locations', 'chats.locationID', 'locations.ID')
 		.catch((error) => KnexError(error));
 };
 
@@ -36,7 +40,9 @@ exports.getById = async function getById(ID) {
  * @throws {KnexError} - Re-raise and sanitise DB errors
  */
 exports.getAll = async function getAll(userID) {
-	return knex.from('chats').select('*').where({ userID })
+	return knex.from('chats').select('chats.*', 'locations.name as locationName')
+		.where({ userID })
+		.leftJoin('locations', 'chats.locationID', 'locations.ID')
 		.catch((error) => KnexError(error));
 };
 

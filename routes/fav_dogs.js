@@ -29,6 +29,22 @@ async function getFavDog(ctx) {
 }
 
 /**
+ * Route that checks if a user has favourited a dog
+ * @param {Object} ctx - The Koa request/response context object
+ */
+async function checkFavDogById(ctx) {
+	const { ID: userID } = ctx.state.user;
+	const { dogID } = ctx.params;
+	const result = await dogFavModel.getByDogId(userID, dogID);
+	if (result.length) {
+		ctx.body = { favourite: true };
+	} else {
+		ctx.body = { favourite: false };
+		ctx.status = 404;
+	}
+}
+
+/**
  * Route that add a favourite dogs for a user
  * @param {Object} ctx - The Koa request/response context object
  */
@@ -66,6 +82,7 @@ async function delFavDog(ctx) {
 const router = Router({ prefix: '/api/v1/dogs/favs' });
 
 router.get('/', auth, getFavDog);
+router.get('/:dogID([0-9]{1,})', auth, checkFavDogById);
 router.post('/:ID([0-9]{1,})', auth, addFavDog);
 router.del('/:ID([0-9]{1,})', auth, delFavDog);
 

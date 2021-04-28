@@ -36,7 +36,7 @@ const checkGoogleAuth = async function checkGoogleAuth(_accessToken, _refreshTok
 
 	try {
 		user = await model.getOrAdd(user, user.provider);
-		return done(null, user); // user is authenticated
+		return done(null, user[0]); // user is authenticated
 	} catch (err) {
 		return done(null, false); // DB error stopped authentication
 	}

@@ -13,6 +13,23 @@ afterAll(async () => {
 	console.error.mockRestore();
 });
 
+describe('Getting a single chat', () => {
+	test("User cannot see another user's chat", async () => {
+		const res = await request(app.callback())
+			.get('/api/v1/chats/1')
+			.auth('anotherUser', 'password');
+		expect(res.statusCode).toEqual(403);
+	});
+
+	test('User can see their chat', async () => {
+		const res = await request(app.callback())
+			.get('/api/v1/chats/1')
+			.auth('user', 'password');
+		expect(res.statusCode).toEqual(200);
+		expect(res.body).toHaveProperty('ID', 1);
+	});
+});
+
 describe('Getting all chats', () => {
 	test('Unauthorised user does not have chats', async () => {
 		const res = await request(app.callback())
@@ -30,7 +47,7 @@ describe('Getting all chats', () => {
 
 	test('staff can see all chats for a shelter', async () => {
 		const res = await request(app.callback())
-			.get('/api/v1/chats/2')
+			.get('/api/v1/chats/location/2')
 			.auth('staff', 'password');
 		expect(res.body).toHaveLength(1);
 		expect(res.body[0]).toHaveProperty('locationID', 2);
@@ -38,7 +55,7 @@ describe('Getting all chats', () => {
 
 	test('users cannot see all chats for a shelter', async () => {
 		const res = await request(app.callback())
-			.get('/api/v1/chats/2')
+			.get('/api/v1/chats/location/2')
 			.auth('user', 'password');
 		expect(res.statusCode).toEqual(403);
 	});

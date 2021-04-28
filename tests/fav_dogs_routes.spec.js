@@ -13,6 +13,24 @@ afterAll(async () => {
 	console.error.mockRestore();
 });
 
+describe('Checking dogs as favourites', () => {
+	test('Dog ID 1 should be favourited for user', async () => {
+		const res = await request(app.callback())
+			.get('/api/v1/dogs/favs/1')
+			.auth('user', 'password');
+		expect(res.statusCode).toEqual(200);
+		expect(res.body.favourite).toBeTruthy();
+	});
+
+	test('Dog ID 5 should not be favourited for user', async () => {
+		const res = await request(app.callback())
+			.get('/api/v1/dogs/favs/5')
+			.auth('user', 'password');
+		expect(res.statusCode).toEqual(404);
+		expect(res.body.favourite).toBeFalsy();
+	});
+});
+
 describe('Getting favourite dogs', () => {
 	test('example user should have 3 favourite dogs', async () => {
 		const res = await request(app.callback())

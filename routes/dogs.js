@@ -25,6 +25,17 @@ const tweetDog = require('../controllers/tweet_dog.js');
 const can = require('../permissions/dogs.js');
 
 /**
+ * Route that gets the total number of dogs from the database
+ * @param {Object} ctx - The Koa request/response context object
+ */
+async function countDogs(ctx) {
+	const { name, breed } = ctx.query;
+	const result = await dogsModel.countDogs(name || '', breed);
+	const [count] = result;
+	ctx.body = count;
+}
+
+/**
  * Route that gets a dog by their ID from the database
  * @param {Object} ctx - The Koa request/response context object
  */
@@ -40,23 +51,44 @@ async function getById(ctx) {
 }
 
 /**
+ * Route that gets all breeds of dogs.
+ * @param {Object} ctx - The Koa request/response context object
+ */
+async function getAllBreeds(ctx) {
+	const breeds = [];
+	const result = await dogsModel.getAllBreeds();
+	result.forEach(({ breed }) => breeds.push(breed));
+	ctx.body = breeds.sort();
+}
+
+/**
  * Route that gets all dog or dogs matching a name and/or breed.
  * @param {Object} ctx - The Koa request/response context object
  */
 async function getDogs(ctx) {
 	let result;
 	const { name, breed } = ctx.query;
+	let { page } = ctx.query;
+	page = (page === undefined || page < 1) ? 1 : parseInt(page, 10);
 
 	if (name || breed) {
 		// if name is undefined then pass an empty string
-		result = await dogsModel.searchDogs(name || '', breed);
+		result = await dogsModel.searchDogs(name || '', breed, page);
 	} else {
 		// if there are no query params send a list of all dogs
-		result = await dogsModel.getAll();
+		result = await dogsModel.getAll(page);
 	}
 
+	ctx.originalUrl.replace(/(page=)[^//&]+/, `$1${page + 1}`);
+
 	if (result.length) {
-		ctx.body = result;
+		ctx.body = {
+			dogs: result,
+			links: {
+				prev: ctx.originalUrl.replace(/(page=)[^//&]+/, `$1${page - 1}`),
+				next: ctx.originalUrl.replace(/(page=)[^//&]+/, `$1${page + 1}`)
+			}
+		};
 	}
 }
 
@@ -100,7 +132,7 @@ async function createDog(ctx, next) {
  * Route that gets updates a dog in the API.
  * @param {Object} ctx - The Koa request/response context object
  */
-async function updateDog(ctx) {
+async function updateDog(ctx, next) {
 	const { ID } = ctx.params;
 	let result = await dogsModel.getById(ID);
 	if (!result.length) {
@@ -123,9 +155,10 @@ async function updateDog(ctx) {
 			ctx.body = {
 				ID,
 				updated: true,
-				link
+				links: link
 			};
 			ctx.status = 201;
+			await next();
 		}
 	}
 }
@@ -160,6 +193,8 @@ const router = Router({ prefix: '/api/v1/dogs' });
 router.get('/', getDogs);
 router.post('/', auth, koaBody, valDog, createDog, tweetDog, imageUpload);
 router.get('/:ID([0-9]{1,})', getById);
+router.get('/count', countDogs);
+router.get('/breeds', getAllBreeds);
 router.put('/:ID([0-9]{1,})', auth, koaBody, valDogUpdate, updateDog, imageUpload);
 router.del('/:ID([0-9]{1,})', auth, deleteDog);
 

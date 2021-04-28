@@ -24,12 +24,37 @@ afterAll(async () => {
 	mock.restore();
 });
 
+describe('Counting dogs', () => {
+	test('there should be a count of 5 dogs', async () => {
+		const res = await request(app.callback())
+			.get('/api/v1/dogs/count');
+		expect(res.statusCode).toEqual(200);
+		expect(res.body).toHaveProperty('count', 5);
+	});
+
+	test('there should be a count of 1 dogs with name Phoebe and breed kelpie', async () => {
+		const res = await request(app.callback())
+			.get('/api/v1/dogs/count/?name=Phoebe&breed=Kelpie');
+		expect(res.statusCode).toEqual(200);
+		expect(res.body).toHaveProperty('count', 1);
+	});
+});
+
+describe('Getting breeds', () => {
+	test('there should be 5 breeds of dogs', async () => {
+		const res = await request(app.callback())
+			.get('/api/v1/dogs/breeds');
+		expect(res.statusCode).toEqual(200);
+		expect(res.body).toHaveLength(5);
+	});
+});
+
 describe('Getting dogs', () => {
 	test('get all 5 default dogs as guest', async () => {
 		const res = await request(app.callback())
 			.get('/api/v1/dogs');
 		expect(res.statusCode).toEqual(200);
-		expect(res.body).toHaveLength(5);
+		expect(res.body.dogs).toHaveLength(5);
 	});
 
 	test('get all 5 default dogs as authenticated user', async () => {
@@ -37,7 +62,20 @@ describe('Getting dogs', () => {
 			.get('/api/v1/dogs')
 			.auth('user', 'password');
 		expect(res.statusCode).toEqual(200);
-		expect(res.body).toHaveLength(5);
+		expect(res.body.dogs).toHaveLength(5);
+	});
+
+	test('get all 5 dogs with page as 0', async () => {
+		const res = await request(app.callback())
+			.get('/api/v1/dogs/?page=0');
+		expect(res.statusCode).toEqual(200);
+		expect(res.body.dogs).toHaveLength(5);
+	});
+
+	test('get all 0 dogs with page as 2', async () => {
+		const res = await request(app.callback())
+			.get('/api/v1/dogs/?page=2');
+		expect(res.statusCode).toEqual(404);
 	});
 });
 
@@ -46,23 +84,23 @@ describe('searching for dogs', () => {
 		const res = await request(app.callback())
 			.get('/api/v1/dogs/?breed=poodle');
 		expect(res.statusCode).toEqual(200);
-		expect(res.body).toHaveLength(1);
-		expect(res.body[0]).toHaveProperty('name', 'Sophie');
-		expect(res.body[0]).toHaveProperty('breed', 'Poodle');
+		expect(res.body.dogs).toHaveLength(1);
+		expect(res.body.dogs[0]).toHaveProperty('name', 'Sophie');
+		expect(res.body.dogs[0]).toHaveProperty('breed', 'Poodle');
 	});
 
 	test('search by name Phoebe', async () => {
 		const res = await request(app.callback())
 			.get('/api/v1/dogs/?name=Phoebe');
 		expect(res.statusCode).toEqual(200);
-		expect(res.body).toHaveLength(2);
+		expect(res.body.dogs).toHaveLength(2);
 	});
 
 	test('search by name and breed', async () => {
 		const res = await request(app.callback())
 			.get('/api/v1/dogs/?name=Phoebe&breed=Kelpie');
 		expect(res.statusCode).toEqual(200);
-		expect(res.body).toHaveLength(1);
+		expect(res.body.dogs).toHaveLength(1);
 	});
 });
 
@@ -97,6 +135,7 @@ describe('Add a new dog', () => {
 			.post('/api/v1/dogs')
 			.field('name', 'Stacy')
 			.field('age', '3')
+			.field('gender', 'Female')
 			.field('breed', 'Bulldog')
 			.field('description', 'A crazy bulldog.')
 			.attach('upload', './images/dog.jpg');
@@ -109,6 +148,7 @@ describe('Add a new dog', () => {
 			.auth('user', 'password')
 			.field('name', 'Stacy')
 			.field('age', '3')
+			.field('gender', 'Female')
 			.field('breed', 'Bulldog')
 			.field('description', 'A crazy bulldog.')
 			.attach('upload', './images/dog.jpg');
@@ -121,6 +161,7 @@ describe('Add a new dog', () => {
 			.auth('staff', 'password')
 			.field('name', 'Stacy')
 			.field('age', '3')
+			.field('gender', 'Female')
 			.field('breed', 'Bulldog')
 			.field('description', 'A crazy bulldog.')
 			.attach('upload', './images/dog.jpg');
@@ -157,6 +198,7 @@ describe('Update a dog record', () => {
 				name: 'Annie',
 				age: '1',
 				breed: 'Pomeranian',
+				gender: 'Male',
 				description: 'A small pupper'
 			});
 		expect(res.statusCode).toEqual(403);
@@ -176,13 +218,14 @@ describe('Update a dog record', () => {
 			.send({
 				name: 'Annie',
 				age: '1',
+				gender: 'Male',
 				breed: 'Pomeranian',
 				description: 'A small pupper'
 			});
 		expect(res.statusCode).toEqual(201);
 		expect(res.body).toHaveProperty('ID', '6');
 		expect(res.body.updated).toBeTruthy();
-		expect(res.body).toHaveProperty('link');
+		expect(res.body).toHaveProperty('links');
 	});
 
 	test('updated dog should have different details', async () => {
@@ -216,7 +259,7 @@ describe('Deleting a dog', () => {
 		const res = await request(app.callback())
 			.get('/api/v1/dogs');
 		expect(res.statusCode).toEqual(200);
-		expect(res.body).toHaveLength(6);
+		expect(res.body.dogs).toHaveLength(6);
 	});
 
 	test('original staff can delete dog', async () => {
@@ -231,6 +274,6 @@ describe('Deleting a dog', () => {
 		const res = await request(app.callback())
 			.get('/api/v1/dogs');
 		expect(res.statusCode).toEqual(200);
-		expect(res.body).toHaveLength(5);
+		expect(res.body.dogs).toHaveLength(5);
 	});
 });

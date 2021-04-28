@@ -5,7 +5,7 @@
  * @see helpers/* for other helper functions
  */
 
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 
 /**
  * Function to hash a password using bcrypt.

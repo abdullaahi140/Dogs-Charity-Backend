@@ -1,5 +1,5 @@
 /**
- * A module used to hash passwords using bcrypt.
+ * A module used to create JWTs for user authentication.
  * @module helpers/jwtToken
  * @author Abdullaahi Farah
  * @see helpers/* for other helper functions
@@ -20,13 +20,17 @@ const payload = {
  * @param {number} ID - The ID of the user
  * @param {Object} username - The username of the user
  * @param {string} provider - The provider of the account e.g. 'google', 'internal'
- * @returns {Object} - A signed JWT access token
+ * @returns {Object} - A signed JWT access token and the expiry time
  */
 exports.genJwtAccessToken = async function genJwtAccessToken(ID, username, provider = 'internal') {
 	payload.sub = ID;
 	payload.name = username;
 	payload.provider = provider;
-	const accessToken = jwt.sign(payload, process.env.JWT_ACCESS_SECRET, { expiresIn: '10m' });
+	const expire = 600; // 10 min expiry
+	const accessToken = {
+		token: jwt.sign(payload, process.env.JWT_ACCESS_SECRET, { expiresIn: '10m' }),
+		expiresIn: expire
+	};
 	return accessToken;
 };
 
@@ -41,9 +45,13 @@ exports.genJwtRefreshToken = async function genJwtRefreshToken(ID, username, pro
 	payload.sub = ID;
 	payload.name = username;
 	payload.provider = provider;
-	const refreshToken = jwt.sign(payload, process.env.JWT_REFRESH_SECRET, { expiresIn: '4w' });
-	const userRefresh = { userID: ID, refresh_token: refreshToken };
-	return userRefresh;
+	const expire = 1209600; // 14 day expiry
+	const refreshToken = {
+		userID: ID,
+		token: jwt.sign(payload, process.env.JWT_REFRESH_SECRET, { expiresIn: '7d' }),
+		expiresIn: expire
+	};
+	return refreshToken;
 };
 
 /**

@@ -8,6 +8,18 @@
 const { knex, KnexError } = require('../database/knex.js');
 
 /**
+ * Function that gets a user's favourite dog using userID and dogID.
+ * @param {number} userID - The user's ID number
+ * @param {number} dogID - The user's ID number
+ * @returns {Array} - Array with objects of favourite dogs
+ * @throws {KnexError} - Re-raise and sanitise DB errors
+ */
+exports.getByDogId = async function getByDogId(userID, dogID) {
+	return knex.from('dog_favourites').select('dogID').where({ userID, dogID })
+		.catch((error) => KnexError(error));
+};
+
+/**
  * Function that gets a user's favourite dogs using userID.
  * @param {number} userID - The user's ID number
  * @returns {Array} - Array with objects of favourite dogs

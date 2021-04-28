@@ -8,14 +8,42 @@
 const { knex, KnexError } = require('../database/knex.js');
 
 /**
+ * Function that gets the number of dog from the database.
+ * @param {string} name - name of the dog
+ * @param {string} breed - breed of the dog
+ * @returns {Array<Object>} - Array of user objects
+ * @throws {KnexError} - Re-raise and sanitise DB errors
+ */
+exports.countDogs = async function countDogs(name, breed) {
+	return knex.from('dogs').count('* as count')
+		.where('dogs.name', 'like', `${name}%`)
+		.andWhere(function checkBreed() {
+			if (breed) this.where({ breed }); // only search breed if it is defined
+		});
+};
+
+/**
  * Function that gets all dogs from the database.
  * @returns {Array<Object>} - Array of user objects
  * @throws {KnexError} - Re-raise and sanitise DB errors
  */
-exports.getAll = async function getAll() {
-	return knex.from('dogs').select('dogs.*', 'dog_locations.locationID')
+exports.getAll = async function getAll(page = 1) {
+	return knex.from('dogs')
+		.select('dogs.*', 'dog_locations.locationID', 'locations.name as locationName')
 		.leftJoin('dog_locations', 'dogs.ID', 'dog_locations.dogID')
+		.leftJoin('locations', 'dog_locations.locationID', 'locations.ID')
+		.limit(12)
+		.offset((page - 1) * 12)
 		.catch((error) => KnexError(error));
+};
+
+/**
+ * Function that gets all breeds of dogd from the database.
+ * @returns {Array<Object>} - Array of user objects
+ * @throws {KnexError} - Re-raise and sanitise DB errors
+ */
+exports.getAllBreeds = async function getAllBreeds() {
+	return knex.from('dogs').distinct('breed');
 };
 
 /**
@@ -25,9 +53,11 @@ exports.getAll = async function getAll() {
  * @throws {KnexError} - Re-raise and sanitise DB errors
  */
 exports.getById = async function getById(ID) {
-	return knex.from('dogs').select('dogs.*', 'dog_locations.locationID')
+	return knex.from('dogs')
+		.select('dogs.*', 'dog_locations.locationID', 'locations.name as locationName')
 		.where('dogs.ID', ID)
 		.leftJoin('dog_locations', 'dogs.ID', 'dog_locations.dogID')
+		.leftJoin('locations', 'dog_locations.locationID', 'locations.ID')
 		.catch((error) => KnexError(error));
 };
 
@@ -38,9 +68,11 @@ exports.getById = async function getById(ID) {
  * @throws {KnexError} - Re-raise and sanitise DB errors
  */
 exports.getByName = async function getByName(name) {
-	return knex.from('dogs').select('dogs.*', 'dog_locations.locationID')
+	return knex.from('dogs')
+		.select('dogs.*', 'dog_locations.locationID', 'locations.name as locationName')
 		.where('dogs.name', name)
 		.leftJoin('dog_locations', 'dogs.ID', 'dog_locations.dogID')
+		.leftJoin('locations', 'dog_locations.locationID', 'locations.ID')
 		.catch((error) => KnexError(error));
 };
 
@@ -51,13 +83,17 @@ exports.getByName = async function getByName(name) {
  * @returns {Array<Object>} - Array with objects of dogss with matching name or breed
  * @throws {KnexError} - Re-raise and sanitise DB errors
  */
-exports.searchDogs = async function searchDogs(name, breed) {
-	return knex.from('dogs').select('dogs.*', 'dog_locations.locationID')
+exports.searchDogs = async function searchDogs(name, breed, page = 1) {
+	return knex.from('dogs')
+		.select('dogs.*', 'dog_locations.locationID', 'locations.name as locationName')
 		.where('dogs.name', 'like', `${name}%`)
 		.andWhere(function checkBreed() {
 			if (breed) this.where({ breed }); // only search breed if it is defined
 		})
 		.leftJoin('dog_locations', 'dogs.ID', 'dog_locations.dogID')
+		.leftJoin('locations', 'dog_locations.locationID', 'locations.ID')
+		.limit(12)
+		.offset((page - 1) * 12)
 		.catch((error) => KnexError(error));
 };
 
