@@ -21,6 +21,17 @@
 						"1"
 					]
 				},
+				"gender": {
+					"description": "The gender of the dog",
+					"type": "string",
+					"enum": [
+						"Male",
+						"Female"
+					],
+					"examples": [
+						"Female"
+					]
+				},
 				"breed": {
 					"description": "The breed of the dog",
 					"type": "string",
@@ -48,6 +59,8 @@
 			"required": [
 				"name",
 				"age",
+				"gender",
+				"breed",
 				"description"
 			],
 			"additionalProperties": false
@@ -77,6 +90,17 @@
 					"type": "string",
 					"examples": [
 						"1"
+					]
+				},
+				"gender": {
+					"description": "The gender of the dog",
+					"type": "string",
+					"enum": [
+						"Male",
+						"Female"
+					],
+					"examples": [
+						"Female"
 					]
 				},
 				"breed": {
@@ -138,6 +162,17 @@
 					"type": "string",
 					"examples": [
 						"1"
+					]
+				},
+				"gender": {
+					"description": "The gender of the dog",
+					"type": "string",
+					"enum": [
+						"Male",
+						"Female"
+					],
+					"examples": [
+						"Female"
 					]
 				},
 				"breed": {
