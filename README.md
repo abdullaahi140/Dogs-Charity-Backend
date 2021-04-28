@@ -6,4 +6,7 @@ You'll then want to migrate and seed the database using the `npm run refresh_db`
 
 Finally to start the server you can run either `node index.js` or `nodemon` depending on if you have nodemon installed globally.
 
-To view documentation and OpenAPI specification, you can use the docs server by running either `node docs.js` or `nodemon docs.js`
+To generate JSDocs for the project, run `npm run docs`. To view documentation and OpenAPI specification, you can use the docs server by running either `node docs.js` or `nodemon docs.js`. The following links lead to these destinations:
+* `/`: The JSDocs documentation 
+* `/openapi`: The OpenAPI 3.0 specification for the project
+* `/schema/{SCHEMA_FILENAME_HERE}`: The schemas used in the project
