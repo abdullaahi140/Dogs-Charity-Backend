@@ -18,9 +18,9 @@ exports.seed = async function seed(knex) {
 		.then(() => knex('images').insert([
 			{ filename: 'avatar1.png', type: 'image/png' },
 			{ filename: 'avatar2.png', type: 'image/png' },
-			{ filename: 'avatar3.png', type: 'image/png' },
+			{ filename: 'avatar3.jpg', type: 'image/jpeg' },
 			{ filename: 'avatar2.png', type: 'image/png' },
-			{ filename: 'avatar3.png', type: 'image/png' },
+			{ filename: 'avatar3.jpg', type: 'image/jpeg' },
 			{ filename: 'dog1.jpg', type: 'image/jpeg' },
 			{ filename: 'dog2.jpg', type: 'image/jpeg' },
 			{ filename: 'dog3.jpg', type: 'image/jpeg' },
