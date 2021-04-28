@@ -13,7 +13,10 @@ const { knex, KnexError } = require('../database/knex.js');
  * @throws {KnexError} - Re-raise and sanitise DB errors
  */
 exports.getAllByChatId = async function getAllByChatId(chatID) {
-	return knex.from('messages').select('*').where({ chatID })
+	return knex.from('messages')
+		.select('messages.*', 'users.username as senderName', 'users.imageID as senderImageID')
+		.where({ chatID })
+		.leftJoin('users', 'messages.senderID', 'users.ID')
 		.catch((error) => KnexError(error));
 };
 
