@@ -13,6 +13,12 @@ const ac = new AccessControl();
 ac
 	.grant('user')
 	.condition({ Fn: 'EQUALS', args: { requester: '$.owner' } })
+	.execute('read')
+	.on('chat');
+
+ac
+	.grant('user')
+	.condition({ Fn: 'EQUALS', args: { requester: '$.owner' } })
 	.execute('delete')
 	.on('chat');
 
@@ -26,7 +32,7 @@ ac
 			{ Fn: 'EQUALS', args: { requesterLocation: '$.chatLocation' } }
 		]
 	})
-	.execute('delete')
+	.execute('read')
 	.on('chat');
 
 ac
@@ -34,6 +40,18 @@ ac
 	.condition({ Fn: 'EQUALS', args: { requester: '$.owner' } })
 	.execute('read')
 	.on('chats');
+
+ac
+	.grant('staff')
+	.condition({
+		Fn: 'OR',
+		args: [
+			{ Fn: 'EQUALS', args: { requester: '$.owner' } },
+			{ Fn: 'EQUALS', args: { requesterLocation: '$.chatLocation' } }
+		]
+	})
+	.execute('delete')
+	.on('chat');
 
 // Admin permissions
 ac
@@ -45,6 +63,25 @@ ac
 	.grant('admin')
 	.execute('delete')
 	.on('chat');
+
+/**
+ * Function that checks permissions for seeing all chat for a shelter location.
+ * @param {Object} requester - The authenticated user requesting access to the resource
+ * @param {Object} data - The user with ID that's to be retrieved from the database
+ * @returns {Object} - A permissions Object that grants the user and filters the resource.
+ */
+exports.readChat = async function readChat(requester, data) {
+	return ac
+		.can(requester.role)
+		.context({
+			requester: requester.ID,
+			owner: data.userID,
+			requesterLocation: requester.locationID,
+			chatLocation: data.locationID
+		})
+		.execute('read')
+		.on('chat');
+};
 
 /**
  * Function that checks permissions for seeing all chat for a shelter location.
