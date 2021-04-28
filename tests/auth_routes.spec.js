@@ -46,7 +46,7 @@ describe('Authenticating users using JWT', () => {
 
 		res = await request(app.callback())
 			.get('/api/v1/users/3')
-			.set('Authorization', `Bearer ${res.body.accessToken}`);
+			.set('Authorization', `Bearer ${res.body.accessToken.token}`);
 
 		expect(res.statusCode).toEqual(200);
 		expect(res.body).toHaveProperty('username', 'user');
@@ -92,7 +92,7 @@ describe('Log out user', () => {
 
 	test('Log out authenticated user', async () => {
 		const res = await request(app.callback())
-			.post('/api/v1/auth/logout/')
+			.post('/api/v1/auth/logout')
 			.auth('user', 'password');
 		expect(res.statusCode).toEqual(200);
 		expect(res.body).toHaveProperty('affectedRows', 1);
