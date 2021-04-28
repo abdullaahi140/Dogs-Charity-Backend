@@ -43,6 +43,10 @@
 		{
 			"name": "Images",
 			"description": "API endpoints for image management."
+		},
+		{
+			"name": "Locations",
+			"description": "API endpoints for location management."
 		}
 	],
 	"components": {
@@ -105,6 +109,40 @@
 							false
 						]
 					}
+				}
+			},
+			"location": {
+				"type": "object",
+				"properties": {
+					"ID": {
+						"description": "ID of the shelter",
+						"type": "number",
+						"examples": [
+							1
+						]
+					},
+					"name": {
+						"description": "The name of the shelter location",
+						"type": "string",
+						"examples": [
+							"Animal Trust"
+						]
+					},
+					"dateCreated": {
+						"description": "The datetime of the shelter location added to the API",
+						"type": "string",
+						"minLength": 19,
+						"examples": [
+							"2021-03-30 10:50:24"
+						]
+					}
+				}
+			},
+			"locationList": {
+				"description": "List of all the shelter locations in the API.",
+				"type": "array",
+				"items": {
+					"$ref": "#/components/schemas/location"
 				}
 			}
 		}
@@ -743,7 +781,7 @@
 				}
 			}
 		},
-		"/chats/{locationID}": {
+		"/chats/location/{locationID}": {
 			"parameters": [
 				{
 					"in": "path",
@@ -752,7 +790,7 @@
 						"description": "ID of the shelter",
 						"type": "number",
 						"examples": [
-							2
+							1
 						]
 					},
 					"required": true
@@ -825,6 +863,27 @@
 					"required": true
 				}
 			],
+			"get": {
+				"tags": [
+					"Chats"
+				],
+				"description": "Get a chat by ID.",
+				"responses": {
+					"200": {
+						"description": "The chat object.",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "./chat.schema.json#/definitions/chat"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "The chat could not be found."
+					}
+				}
+			},
 			"delete": {
 				"tags": [
 					"Chats"
@@ -997,16 +1056,77 @@
 					"required": true
 				}
 			],
-			"get":{
-				"tags":[
+			"get": {
+				"tags": [
 					"Images"
 				],
 				"description": "Get an image using the ID number",
-				"responses":{
-					"200":{
+				"responses": {
+					"200": {
 						"description": "The image was successfully retrieved from the database."
 					},
 					"404": {
+						"description": "Not found."
+					}
+				}
+			}
+		},
+		"/locations": {
+			"get": {
+				"tags": [
+					"Locations"
+				],
+				"description": "Get all shelter locations that a user hasn't started a chat with.",
+				"responses": {
+					"200": {
+						"description": "A list of shelter locations that the user hasn't started a chat with",
+						"content":{
+							"application/json":{
+								"schema":{
+									"$ref": "#/components/schemas/location"
+								}
+							}
+						}
+					
+					},
+					"400": {
+						"description": "Not found."
+					}
+				}
+			}
+		},
+		"/locations/{ID}": {
+			"parameters": [
+				{
+					"in": "path",
+					"name": "ID",
+					"schema": {
+						"description": "ID of the shelter location",
+						"type": "number",
+						"examples": [
+							1
+						]
+					},
+					"required": true
+				}
+			],
+			"get": {
+				"tags": [
+					"Locations"
+				],
+				"description": "Get details about a shelter location.",
+				"responses": {
+					"200": {
+						"description": "The shelter location's details",
+						"content":{
+							"application/json":{
+								"schema":{
+									"$ref": "#/components/schemas/locationList"
+								}
+							}
+						}
+					},
+					"400": {
 						"description": "Not found."
 					}
 				}
