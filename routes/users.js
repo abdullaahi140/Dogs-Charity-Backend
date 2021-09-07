@@ -72,7 +72,6 @@ async function getById(ctx) {
  * @param {number} staffCode - The staff code for a shelter location
  * @returns {boolean} - Boolean on success of getting location and adding staff ID
  */
-// eslint-disable-next-line consistent-return
 async function checkStaffRole(staffID, staffCode) {
 	let result = await locationsModel.getByStaffCode(staffCode);
 	if (result.length) {

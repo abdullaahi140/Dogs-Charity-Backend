@@ -40,7 +40,6 @@ async function checkFavDogById(ctx) {
 		ctx.body = { favourite: true };
 	} else {
 		ctx.body = { favourite: false };
-		ctx.status = 404;
 	}
 }
 
@@ -55,11 +54,11 @@ async function addFavDog(ctx) {
 		const result = await dogFavModel.add(userID, dogID);
 		if (result.length) {
 			ctx.status = 201;
-			ctx.body = { created: true };
+			ctx.body = { favourite: true };
 		}
 	} catch (error) {
 		ctx.status = 404;
-		ctx.body = { created: false };
+		ctx.body = { favourite: false };
 	}
 }
 
@@ -72,7 +71,7 @@ async function delFavDog(ctx) {
 	const { ID: dogID } = ctx.params;
 	const result = await dogFavModel.delFavDog(userID, dogID);
 	if (result === 1) {
-		ctx.body = { deleted: true };
+		ctx.body = { favourite: false };
 	} else {
 		ctx.status = 404;
 		ctx.body = { deleted: false };

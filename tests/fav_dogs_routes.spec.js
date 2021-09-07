@@ -26,7 +26,7 @@ describe('Checking dogs as favourites', () => {
 		const res = await request(app.callback())
 			.get('/api/v1/dogs/favs/5')
 			.auth('user', 'password');
-		expect(res.statusCode).toEqual(404);
+		expect(res.statusCode).toEqual(200);
 		expect(res.body.favourite).toBeFalsy();
 	});
 });
@@ -68,7 +68,7 @@ describe('Adding dogs as favourites', () => {
 			.post('/api/v1/dogs/favs/1')
 			.auth('staff', 'password');
 		expect(res.statusCode).toEqual(201);
-		expect(res.body.created).toBeTruthy();
+		expect(res.body.favourite).toBeTruthy();
 	});
 
 	test('staff user cannot favourite same dog again', async () => {
@@ -107,7 +107,7 @@ describe('Removing favourites from dogs', () => {
 			.del('/api/v1/dogs/favs/1')
 			.auth('user', 'password');
 		expect(res.statusCode).toEqual(200);
-		expect(res.body.deleted).toBeTruthy();
+		expect(res.body.favourite).toBeFalsy();
 	});
 
 	test('example user should have 2 favourite dogs after removal', async () => {
