@@ -117,3 +117,7 @@ dist
 
 # VS Code configs
 .vscode/
+
+# Image upload directories
+tmp/
+var/
