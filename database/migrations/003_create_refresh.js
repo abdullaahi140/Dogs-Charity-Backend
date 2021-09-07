@@ -15,6 +15,7 @@ exports.up = function up(knex) {
 	return knex.schema.createTable('refresh', (table) => {
 		table.integer('userID').unique().unsigned();
 		table.string('refresh_token', 300);
+		table.timestamp('expiryDate').defaultTo(knex.fn.now());
 		table.foreign('userID').references('users.ID').onDelete('CASCADE');
 	});
 };
