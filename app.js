@@ -3,8 +3,17 @@ const cors = require('@koa/cors');
 require('dotenv').config();
 
 const app = new Koa();
+
+const whitelist = ['http://localhost:3001', 'https://dogs-charity.netlify.app'];
+const multipleOrigin = function multipleOrigin(ctx) {
+	if (whitelist.includes(ctx.request.header.origin)) {
+		return ctx.request.header.origin;
+	}
+	return null;
+};
+
 app.use(cors({
-	origin: 'http://localhost:3001',
+	origin: multipleOrigin,
 	allowMethods: ['GET', 'POST', 'PUT', 'DELETE']
 }));
 
