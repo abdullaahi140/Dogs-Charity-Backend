@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Backend for 6003CEM",
   "main": "index.js",
+  "engines": {
+    "node": "14.x"
+  },
   "scripts": {
     "knex": "knex --knexfile ./database/knexfile.js",
     "list": "knex --knexfile ./database/knexfile.js migrate:list",
