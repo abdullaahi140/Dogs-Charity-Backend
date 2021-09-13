@@ -6,8 +6,8 @@ const app = new Koa();
 
 const whitelist = ['http://localhost:3001', 'https://dogs-charity.netlify.app'];
 const multipleOrigin = function multipleOrigin(ctx) {
-	if (whitelist.includes(ctx.request.header.origin)) {
-		return ctx.request.header.origin;
+	if (whitelist.includes(ctx.headers.origin)) {
+		return ctx.headers.origin;
 	}
 	return null;
 };
