@@ -8,6 +8,11 @@
     "npm": "7.x"
   },
   "scripts": {
+    "start": "node index.js",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "coverage": "jest --coverage",
+    "docs": "jsdoc -c jsdoc.conf.json --readme ./README.md",
     "knex": "knex --knexfile ./database/knexfile.js",
     "list": "knex --knexfile ./database/knexfile.js migrate:list",
     "undo": "knex --knexfile ./database/knexfile.js migrate:down",
@@ -16,11 +21,8 @@
     "rollback": "knex --knexfile ./database/knexfile.js migrate:rollback --all",
     "make_seed": "knex --knexfile ./database/knexfile.js seed:make",
     "seed": "knex --knexfile ./database/knexfile.js seed:run",
-    "refresh_db": "npm run rollback && npm run migrate && npm run seed",
-    "docs": "jsdoc -c jsdoc.conf.json --readme ./README.md",
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "coverage": "jest --coverage"
+    "refresh_db": "npm run rollback && npm run migrate && npm run seed"
+
   },
   "repository": {
     "type": "git",
