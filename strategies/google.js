@@ -49,7 +49,7 @@ const checkGoogleAuth = async function checkGoogleAuth(_accessToken, _refreshTok
 const options = {
 	clientID: process.env.GOOGLE_CLIENT_ID,
 	clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-	callbackURL: `http://localhost:${process.env.SERVER_PORT}/api/v1/auth/google/callback`
+	callbackURL: `http://localhost:${process.env.PORT}/api/v1/auth/google/callback`
 };
 
 module.exports = new google.Strategy(options, checkGoogleAuth);
