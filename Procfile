@@ -1,2 +1,1 @@
-web: npm run refresh_db
-web: npm run start
+web: npm run refresh_db && npm run start
